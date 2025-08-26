@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import styles from './bar.module.css';
 export default function Bar() {
-    <div className={styles.bar}>
+    return <div className={styles.bar}>
     <div className={styles.bar__content}>
       <div className={styles.bar__playerProgress}></div>
       <div className={styles.bar__playerBlock}>
