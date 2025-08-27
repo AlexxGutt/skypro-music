@@ -6,8 +6,8 @@ export default function Bar() {
     <div className={styles.bar__content}>
       <div className={styles.bar__playerProgress}></div>
       <div className={styles.bar__playerBlock}>
-        <div className={'bar__player'}>
-          <div className={'player__controls'}>
+        <div className={styles.bar__player}>
+          <div className={styles.player__controls}>
             <div className={'player__btnPrev'}>
               <svg className={'player__btnPrevSvg'}>
                 <use xlinkHref="/img/icon/sprite.svg#icon-prev"></use>
