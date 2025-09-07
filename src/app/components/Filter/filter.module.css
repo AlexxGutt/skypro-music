@@ -30,8 +30,76 @@
   border: 1px solid #ffffff;
   border-radius: 60px;
   padding: 6px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  margin-right: 10px;
+}
+.filter__button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
-.filter__button:not(:last-child) {
-  margin-right: 10px;
+.filter__button_active {
+  background-color: #504e4e;
+  color: #dfd9d9;
+  border-color: #504e4e;
+}
+
+.filter__button_active:hover {
+  background-color: #ccb5b5;
+  color: #000000;
+}
+
+.filter__wrapper {
+  position: relative;
+  display: inline-block;
+}
+.filter__dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #504e4e;
+  color: #dfd9d9;
+  border-radius: 12px;
+  padding: 12px;
+  margin-top: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+  min-width: 150px;
+  font-size: 14px;
+}
+
+.dropdown__item {
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.dropdown__item:hover {
+  background-color: #ccb5b5;
+}
+
+.filter__dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+
+.filter__dropdown::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.filter__dropdown::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.filter__dropdown::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
