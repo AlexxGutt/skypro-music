@@ -1,5 +1,4 @@
 import styles from './centerblock.module.css';
-import classnames from 'classnames';
 import Search from '../Search/Search';
 import Track from '../Track/Track';
 import Filter from '../Filter/Filter';

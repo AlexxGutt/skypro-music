@@ -1,4 +1,4 @@
-import { Track } from './sheredTypes/sheredTypes';
+import { Track } from './sharedTypes/sharedTypes';
 
 export const data: Track[] = [
   {
