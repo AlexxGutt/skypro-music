@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import styles from './bar.module.css';
 import classnames from 'classnames';
 export default function Bar() {
