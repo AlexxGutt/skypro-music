@@ -1,9 +1,11 @@
+// components/Filter/Filter.tsx
 'use client';
 
 import { getUniqueValues } from '@/app/utils/helper';
 import styles from './filter.module.css';
 import { data } from '@/app/data';
 import { useState } from 'react';
+import FilterItems from '../FilterItem/FilterItems';
 
 export default function Filter() {
   const [isArtistFilterOpen, setIsArtistFilterOpen] = useState(false);
@@ -12,6 +14,8 @@ export default function Filter() {
 
   const uniqueAuthors = getUniqueValues(data, 'author');
   const uniqueGenre = getUniqueValues(data, 'genre');
+
+  const yearOptions = ['Сначала новые', 'Сначала старые', 'По умолчанию'];
 
   const toggleArtistFilter = () => {
     setIsArtistFilterOpen(!isArtistFilterOpen);
@@ -34,88 +38,25 @@ export default function Filter() {
   return (
     <div className={styles.centerblock__filter}>
       <div className={styles.filter__title}>Искать по:</div>
-      <div className={styles.filter__wrapper}>
-        <div
-          className={`${styles.filter__button} ${
-            isArtistFilterOpen ? styles.filter__button_active : ''
-          }`}
-          onClick={toggleArtistFilter}
-        >
-          исполнителю
-        </div>
-        {isArtistFilterOpen && (
-          <div className={styles.filter__dropdown}>
-            {uniqueAuthors.map((author) => (
-              <div
-                key={author}
-                className={styles.dropdown__item}
-                onClick={() => {
-                  setIsArtistFilterOpen(false);
-                }}
-              >
-                {author}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-      <div className={styles.filter__wrapper}>
-        <div
-          className={`${styles.filter__button} ${
-            isYearFilterOpen ? styles.filter__button_active : ''
-          }`}
-          onClick={toggleYearFilter}
-        >
-          году выпуска
-        </div>
-        {isYearFilterOpen && (
-          <div className={styles.filter__dropdown}>
-            <div
-              className={styles.dropdown__item}
-              onClick={() => setIsYearFilterOpen(false)}
-            >
-              Сначала новые
-            </div>
-            <div
-              className={styles.dropdown__item}
-              onClick={() => setIsYearFilterOpen(false)}
-            >
-              Сначала старые
-            </div>
-            <div
-              className={styles.dropdown__item}
-              onClick={() => setIsYearFilterOpen(false)}
-            >
-              По умолчанию
-            </div>
-          </div>
-        )}
-      </div>
-      <div className={styles.filter__wrapper}>
-        <div
-          className={`${styles.filter__button} ${
-            isGenreFilterOpen ? styles.filter__button_active : ''
-          }`}
-          onClick={toggleGenreFilter}
-        >
-          жанру
-        </div>
-        {isGenreFilterOpen && (
-          <div className={styles.filter__dropdown}>
-            {uniqueGenre.map((genre) => (
-              <div
-                key={genre}
-                className={styles.dropdown__item}
-                onClick={() => {
-                  setIsGenreFilterOpen(false);
-                }}
-              >
-                {genre}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+
+      <FilterItems
+        label="исполнителю"
+        isOpen={isArtistFilterOpen}
+        onToggle={toggleArtistFilter}
+        items={uniqueAuthors}
+      />
+      <FilterItems
+        label="году выпуска"
+        isOpen={isYearFilterOpen}
+        onToggle={toggleYearFilter}
+        items={yearOptions}
+      />
+      <FilterItems
+        label="жанру"
+        isOpen={isGenreFilterOpen}
+        onToggle={toggleGenreFilter}
+        items={uniqueGenre}
+      />
     </div>
   );
 }
