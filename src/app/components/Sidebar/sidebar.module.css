@@ -65,8 +65,8 @@
 }
 
 .sidebar__item {
-  width: 250px;
-  height: 150px;
+  width: 100%;
+  height: auto;
 }
 
 .sidebar__item:not(:last-child) {

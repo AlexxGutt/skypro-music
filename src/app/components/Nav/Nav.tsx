@@ -1,7 +1,15 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './nav.module.css';
+import { useState } from 'react';
 export default function Nav() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
   return (
     <nav className={styles.main__nav}>
       <div className={styles.nav__logo}>
@@ -14,12 +22,14 @@ export default function Nav() {
           alt={'logo'}
         />
       </div>
-      <div className={styles.nav__burger}>
+      <div onClick={toggleMenu} className={styles.nav__burger}>
         <span className={styles.burger__line}></span>
         <span className={styles.burger__line}></span>
         <span className={styles.burger__line}></span>
       </div>
-      <div className={styles.nav__menu}>
+      <div
+        className={`${styles.nav__menu} ${isMenuOpen ? styles.nav__menu_on : ''}`}
+      >
         <ul className={styles.menu__list}>
           <li className={styles.menu__item}>
             {/*TODO: a -> Link*/}

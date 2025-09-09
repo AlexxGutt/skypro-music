@@ -13,6 +13,7 @@
 }
 
 .nav__burger {
+  cursor: pointer;
   width: 20px;
   height: 36px;
   padding: 13px 0;
@@ -29,8 +30,16 @@
 }
 
 .nav__menu {
-  display: block;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease-in-out;
+}
+
+.nav__menu_on {
   visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .logo__image {
@@ -48,6 +57,7 @@
 
 .menu__list {
   padding: 18px 0 10px 0;
+  list-style: none;
 }
 
 .menu__item {
