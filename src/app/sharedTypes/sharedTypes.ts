@@ -1,4 +1,4 @@
-export type Track = {
+export interface TrackType {
   _id: number;
   name: string;
   author: string;
@@ -9,4 +9,4 @@ export type Track = {
   logo: null;
   track_file: string;
   stared_user: string[];
-};
+}

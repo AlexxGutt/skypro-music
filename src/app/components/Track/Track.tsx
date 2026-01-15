@@ -1,14 +1,27 @@
+'use client';
 import { data } from '@/app/data';
 import styles from './track.module.css';
 import Link from 'next/link';
 import { formatTime } from '@/app/utils/helper';
+import { useAppDispatch } from '@/app/store/store';
+import { setCurrentTrack } from '@/app/store/features/trackSlice';
+import { TrackType } from '@/app/sharedTypes/sharedTypes';
 
 export default function Track() {
+  const dispatch = useAppDispatch();
+  const onClickTrack = (track: TrackType) => {
+    dispatch(setCurrentTrack(track));
+  };
+
   return (
     <div className={styles.content__playlist}>
       <div className={styles.playlist__item}>
         {data.map((track) => (
-          <div key={track._id} className={styles.playlist__track}>
+          <div
+            key={track._id}
+            className={styles.playlist__track}
+            onClick={() => onClickTrack(track)}
+          >
             <div className={styles.track__title}>
               <div className={styles.track__titleImage}>
                 <svg className={styles.track__titleSvg}>
