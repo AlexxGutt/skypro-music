@@ -1,6 +1,6 @@
 import styles from './centerblock.module.css';
 import Search from '../Search/Search';
-import TrackType from '../Track/Track';
+import Track from '../Track/Track';
 import Filter from '../Filter/Filter';
 import classnames from 'classnames';
 
@@ -27,7 +27,7 @@ export default function Centerblock() {
             </svg>
           </div>
         </div>
-        <TrackType />
+        <Track />
       </div>
     </div>
   );

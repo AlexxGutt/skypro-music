@@ -1,9 +1,14 @@
+'use client';
 import Link from 'next/link';
 import styles from './bar.module.css';
 import classnames from 'classnames';
+import { useAppSelector } from '@/app/store/store';
 export default function Bar() {
+  const currentTrack = useAppSelector((state) => state.tracks.currentTrack);
+  if (!currentTrack) return <></>;
   return (
     <div className={styles.bar}>
+      <audio controls src={currentTrack?.track_file}></audio>
       <div className={styles.bar__content}>
         <div className={styles.bar__playerProgress}></div>
         <div className={styles.bar__playerBlock}>
