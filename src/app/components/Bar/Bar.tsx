@@ -3,7 +3,7 @@ import Link from 'next/link';
 import styles from './bar.module.css';
 import classnames from 'classnames';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { setIsPlay } from '@/app/store/features/trackSlice';
 
 export default function Bar() {
@@ -12,29 +12,43 @@ export default function Bar() {
 
   const dispatch = useAppDispatch();
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isChangingTrack, setIsChangingTrack] = useState(false);
+
+  useEffect(() => {
+    if (!audioRef.current || isChangingTrack) return;
+
+    if (isPlay) {
+      audioRef.current.play();
+    } else {
+      audioRef.current.pause();
+    }
+  }, [isPlay, isChangingTrack]);
+
+  useEffect(() => {
+    if (!currentTrack || !audioRef.current) return;
+
+    setIsChangingTrack(true);
+    dispatch(setIsPlay(false));
+
+    setTimeout(() => {
+      audioRef.current!.src = currentTrack.track_file;
+
+      setTimeout(() => {
+        dispatch(setIsPlay(true));
+        setIsChangingTrack(false);
+      }, 300);
+    }, 100);
+  }, [currentTrack, dispatch]);
+
+  const togglePlayPause = () => {
+    dispatch(setIsPlay(!isPlay));
+  };
 
   if (!currentTrack) return <></>;
 
-  const togglePlayPause = () => {
-    if (!audioRef.current) return;
-
-    if (isPlay) {
-      audioRef.current.pause();
-      dispatch(setIsPlay(false));
-    } else {
-      audioRef.current.play();
-      dispatch(setIsPlay(true));
-    }
-  };
-
   return (
     <div className={styles.bar}>
-      <audio
-        ref={audioRef}
-        controls
-        src={currentTrack?.track_file}
-        style={{ display: 'none' }}
-      ></audio>
+      <audio ref={audioRef} controls style={{ display: 'none' }}></audio>
       <div className={styles.bar__content}>
         <div className={styles.bar__playerProgress}></div>
         <div className={styles.bar__playerBlock}>
@@ -92,12 +106,12 @@ export default function Bar() {
                 </div>
                 <div className={styles.trackPlay__author}>
                   <Link className={styles.trackPlay__authorLink} href="">
-                    Ты та...
+                    {currentTrack.name} {/* Название трека */}
                   </Link>
                 </div>
                 <div className={styles.trackPlay__album}>
                   <Link className={styles.trackPlay__albumLink} href="">
-                    Баста
+                    {currentTrack.author} {/* Исполнитель */}
                   </Link>
                 </div>
               </div>

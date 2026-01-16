@@ -4,13 +4,14 @@ import styles from './track.module.css';
 import Link from 'next/link';
 import { formatTime } from '@/app/utils/helper';
 import { useAppDispatch } from '@/app/store/store';
-import { setCurrentTrack } from '@/app/store/features/trackSlice';
+import { setCurrentTrack, setIsPlay } from '@/app/store/features/trackSlice';
 import { TrackType } from '@/app/sharedTypes/sharedTypes';
 
 export default function Track() {
   const dispatch = useAppDispatch();
   const onClickTrack = (track: TrackType) => {
     dispatch(setCurrentTrack(track));
+    dispatch(setIsPlay(true));
   };
 
   return (
