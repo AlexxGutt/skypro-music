@@ -2,13 +2,39 @@
 import Link from 'next/link';
 import styles from './bar.module.css';
 import classnames from 'classnames';
-import { useAppSelector } from '@/app/store/store';
+import { useAppDispatch, useAppSelector } from '@/app/store/store';
+import { useRef } from 'react';
+import { setIsPlay } from '@/app/store/features/trackSlice';
+
 export default function Bar() {
   const currentTrack = useAppSelector((state) => state.tracks.currentTrack);
+  const isPlay = useAppSelector((state) => state.tracks.isPlay);
+
+  const dispatch = useAppDispatch();
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
   if (!currentTrack) return <></>;
+
+  const togglePlayPause = () => {
+    if (!audioRef.current) return;
+
+    if (isPlay) {
+      audioRef.current.pause();
+      dispatch(setIsPlay(false));
+    } else {
+      audioRef.current.play();
+      dispatch(setIsPlay(true));
+    }
+  };
+
   return (
     <div className={styles.bar}>
-      <audio controls src={currentTrack?.track_file}></audio>
+      <audio
+        ref={audioRef}
+        controls
+        src={currentTrack?.track_file}
+        style={{ display: 'none' }}
+      ></audio>
       <div className={styles.bar__content}>
         <div className={styles.bar__playerProgress}></div>
         <div className={styles.bar__playerBlock}>
@@ -19,9 +45,18 @@ export default function Bar() {
                   <use xlinkHref="/img/icon/sprite.svg#icon-prev"></use>
                 </svg>
               </div>
-              <div className={classnames(styles.player__btnPlay, styles.btn)}>
+              <div
+                className={classnames(styles.player__btnPlay, styles.btn)}
+                onClick={togglePlayPause}
+              >
                 <svg className={styles.player__btnPlaySvg}>
-                  <use xlinkHref="/img/icon/sprite.svg#icon-play"></use>
+                  <use
+                    xlinkHref={
+                      isPlay
+                        ? '/img/icon/btn_pause.svg'
+                        : '/img/icon/sprite.svg#icon-play'
+                    }
+                  ></use>
                 </svg>
               </div>
               <div className={styles.player__btnNext}>
