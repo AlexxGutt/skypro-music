@@ -3,12 +3,15 @@ import { data } from '@/app/data';
 import styles from './track.module.css';
 import Link from 'next/link';
 import { formatTime } from '@/app/utils/helper';
-import { useAppDispatch } from '@/app/store/store';
+import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { setCurrentTrack, setIsPlay } from '@/app/store/features/trackSlice';
 import { TrackType } from '@/app/sharedTypes/sharedTypes';
 
 export default function Track() {
   const dispatch = useAppDispatch();
+  const currentTrack = useAppSelector((state) => state.tracks.currentTrack);
+  const isPlay = useAppSelector((state) => state.tracks.isPlay);
+
   const onClickTrack = (track: TrackType) => {
     dispatch(setCurrentTrack(track));
     dispatch(setIsPlay(true));
@@ -17,45 +20,55 @@ export default function Track() {
   return (
     <div className={styles.content__playlist}>
       <div className={styles.playlist__item}>
-        {data.map((track) => (
-          <div
-            key={track._id}
-            className={styles.playlist__track}
-            onClick={() => onClickTrack(track)}
-          >
-            <div className={styles.track__title}>
-              <div className={styles.track__titleImage}>
-                <svg className={styles.track__titleSvg}>
-                  <use xlinkHref="/img/icon/sprite.svg#icon-note"></use>
-                </svg>
+        {data.map((track) => {
+          const isCurrentTrack = currentTrack?._id === track._id;
+
+          return (
+            <div
+              key={track._id}
+              className={styles.playlist__track}
+              onClick={() => onClickTrack(track)}
+            >
+              <div className={styles.track__title}>
+                <div className={styles.track__titleImage}>
+                  {isCurrentTrack ? (
+                    <div
+                      className={`${styles.track__pulsingDot} ${isPlay ? '' : styles.static}`}
+                    />
+                  ) : (
+                    <svg className={styles.track__titleSvg}>
+                      <use xlinkHref="/img/icon/sprite.svg#icon-note"></use>
+                    </svg>
+                  )}
+                </div>
+                <div>
+                  <Link className={styles.track__titleLink} href="">
+                    {track.name}
+                    <span className={styles.track__titleSpan}></span>
+                  </Link>
+                </div>
               </div>
-              <div>
-                <Link className={styles.track__titleLink} href="">
-                  {track.name}
-                  <span className={styles.track__titleSpan}></span>
+              <div className={styles.track__author}>
+                <Link className={styles.track__authorLink} href="">
+                  {track.author}
                 </Link>
               </div>
+              <div className={styles.track__album}>
+                <Link className={styles.track__albumLink} href="">
+                  {track.album}
+                </Link>
+              </div>
+              <div className="track__time">
+                <svg className={styles.track__timeSvg}>
+                  <use xlinkHref="/img/icon/sprite.svg#icon-like"></use>
+                </svg>
+                <span className={styles.track__timeText}>
+                  {formatTime(track.duration_in_seconds)}
+                </span>
+              </div>
             </div>
-            <div className={styles.track__author}>
-              <Link className={styles.track__authorLink} href="">
-                {track.author}
-              </Link>
-            </div>
-            <div className={styles.track__album}>
-              <Link className={styles.track__albumLink} href="">
-                {track.album}
-              </Link>
-            </div>
-            <div className="track__time">
-              <svg className={styles.track__timeSvg}>
-                <use xlinkHref="/img/icon/sprite.svg#icon-like"></use>
-              </svg>
-              <span className={styles.track__timeText}>
-                {formatTime(track.duration_in_seconds)}
-              </span>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
