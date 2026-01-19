@@ -1,4 +1,4 @@
-import { Track } from '../sharedTypes/sharedTypes';
+import { TrackType } from '../sharedTypes/sharedTypes';
 export function formatTime(time: number) {
   const minutes = Math.floor(time / 60);
   const inputSecond = Math.floor(time % 60);
@@ -7,7 +7,10 @@ export function formatTime(time: number) {
   return `${minutes}:${outputSecond}`;
 }
 
-export const getUniqueValues = (data: Track[], key: keyof Track): string[] => {
+export const getUniqueValues = (
+  data: TrackType[],
+  key: keyof TrackType,
+): string[] => {
   const allValues: string[] = [];
 
   data.forEach((track) => {
