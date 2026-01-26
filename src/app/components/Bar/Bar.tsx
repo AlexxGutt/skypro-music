@@ -10,6 +10,8 @@ export default function Bar() {
   const currentTrack = useAppSelector((state) => state.tracks.currentTrack);
   const isPlay = useAppSelector((state) => state.tracks.isPlay);
 
+  const [isLoop, setIsLoop] = useState(false);
+
   const dispatch = useAppDispatch();
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isChangingTrack, setIsChangingTrack] = useState(false);
@@ -40,6 +42,10 @@ export default function Bar() {
     }, 100);
   }, [currentTrack, dispatch]);
 
+  const onToggleLoop = () => {
+    setIsLoop(!isLoop);
+  };
+
   const togglePlayPause = () => {
     dispatch(setIsPlay(!isPlay));
   };
@@ -48,7 +54,13 @@ export default function Bar() {
 
   return (
     <div className={styles.bar}>
-      <audio ref={audioRef} controls style={{ display: 'none' }}></audio>
+      <audio
+        ref={audioRef}
+        loop={true}
+        controls
+        style={{ display: 'none' }}
+        onTimeUpdate={() => console.log(111)}
+      ></audio>
       <div className={styles.bar__content}>
         <div className={styles.bar__playerProgress}></div>
         <div className={styles.bar__playerBlock}>
@@ -79,6 +91,7 @@ export default function Bar() {
                 </svg>
               </div>
               <div
+                onClick={onToggleLoop}
                 className={classnames(styles.player__btnRepeat, styles.btnIcon)}
               >
                 <svg className={styles.player__btnRepeatSvg}>
