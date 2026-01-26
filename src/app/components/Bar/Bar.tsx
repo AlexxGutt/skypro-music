@@ -5,12 +5,14 @@ import classnames from 'classnames';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { useEffect, useRef, useState } from 'react';
 import { setIsPlay } from '@/app/store/features/trackSlice';
+import { formatTime } from '@/app/utils/helper';
 
 export default function Bar() {
   const currentTrack = useAppSelector((state) => state.tracks.currentTrack);
   const isPlay = useAppSelector((state) => state.tracks.isPlay);
 
   const [isLoop, setIsLoop] = useState(false);
+  const [isLoadedTrack, setIsLoadedTrack] = useState(false);
 
   const dispatch = useAppDispatch();
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -50,6 +52,21 @@ export default function Bar() {
     dispatch(setIsPlay(!isPlay));
   };
 
+  const onTimeUpdate = () => {
+    if (audioRef.current) {
+      console.log(formatTime(audioRef.current.currentTime));
+      console.log(formatTime(audioRef.current.duration));
+    }
+  };
+
+  const onLoadedMetadata = () => {
+    console.log('Start');
+    if (audioRef.current) {
+      audioRef.current.play();
+      dispatch(setIsPlay(true));
+    }
+  };
+
   if (!currentTrack) return <></>;
 
   return (
@@ -59,7 +76,8 @@ export default function Bar() {
         loop={true}
         controls
         style={{ display: 'none' }}
-        onTimeUpdate={() => console.log(111)}
+        onTimeUpdate={onTimeUpdate}
+        onLoadedMetadata={onLoadedMetadata}
       ></audio>
       <div className={styles.bar__content}>
         <div className={styles.bar__playerProgress}></div>
