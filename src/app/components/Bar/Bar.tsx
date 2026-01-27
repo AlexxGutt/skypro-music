@@ -3,7 +3,7 @@ import Link from 'next/link';
 import styles from './bar.module.css';
 import classnames from 'classnames';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
-import { useEffect, useRef, useState } from 'react';
+import { use, useEffect, useRef, useState } from 'react';
 import { setIsPlay } from '@/app/store/features/trackSlice';
 import { formatTime } from '@/app/utils/helper';
 
@@ -13,6 +13,8 @@ export default function Bar() {
 
   const [isLoop, setIsLoop] = useState(false);
   const [isLoadedTrack, setIsLoadedTrack] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
 
   const dispatch = useAppDispatch();
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -36,7 +38,6 @@ export default function Bar() {
 
     setTimeout(() => {
       audioRef.current!.src = currentTrack.track_file;
-
       setTimeout(() => {
         dispatch(setIsPlay(true));
         setIsChangingTrack(false);
@@ -54,14 +55,15 @@ export default function Bar() {
 
   const onTimeUpdate = () => {
     if (audioRef.current) {
-      console.log(formatTime(audioRef.current.currentTime));
-      console.log(formatTime(audioRef.current.duration));
+      setCurrentTime(audioRef.current.currentTime);
+      setDuration(audioRef.current.duration);
     }
   };
 
   const onLoadedMetadata = () => {
     console.log('Start');
     if (audioRef.current) {
+      setDuration(audioRef.current.duration);
       audioRef.current.play();
       dispatch(setIsPlay(true));
     }
@@ -73,9 +75,9 @@ export default function Bar() {
     <div className={styles.bar}>
       <audio
         ref={audioRef}
-        loop={true}
+        loop={isLoop}
         controls
-        style={{ display: 'none' }}
+        // style={{ display: 'none' }}
         onTimeUpdate={onTimeUpdate}
         onLoadedMetadata={onLoadedMetadata}
       ></audio>
@@ -172,6 +174,15 @@ export default function Bar() {
             </div>
           </div>
           <div className={styles.bar__volumeBlock}>
+            <div className={styles.timeDisplay}>
+              <span className={styles.timeCurrent}>
+                {formatTime(currentTime)}
+              </span>
+              <span className={styles.timeSeparator}> / </span>
+              <span className={styles.timeDuration}>
+                {formatTime(duration)}
+              </span>
+            </div>
             <div className={styles.volume__content}>
               <div className={styles.volume__image}>
                 <svg className={styles.volume__svg}>

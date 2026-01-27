@@ -359,3 +359,30 @@
     cursor: pointer;
   }
 }
+
+.timeDisplay {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+  font-family: 'StratosSkyeng', sans-serif;
+  font-size: 14px;
+  color: #696969;
+  white-space: nowrap;
+}
+
+.timeCurrent {
+  color: #b1b1b1;
+  min-width: 40px;
+  text-align: right;
+}
+
+.timeSeparator {
+  margin: 0 4px;
+  color: #b1b1b1;
+}
+
+.timeDuration {
+  color: #696969;
+  min-width: 40px;
+  text-align: left;
+}
