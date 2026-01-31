@@ -13,6 +13,7 @@ export default function Bar() {
 
   const [isLoop, setIsLoop] = useState(false);
   const [isLoadedTrack, setIsLoadedTrack] = useState(false);
+  const [volume, setVolume] = useState(0.5);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
@@ -67,6 +68,12 @@ export default function Bar() {
       audioRef.current.play();
       dispatch(setIsPlay(true));
     }
+  };
+
+  const changeVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const eVolume = Number(e.target.value);
+    setVolume(eVolume);
+    if (audioRef.current) audioRef.current.volume = eVolume / 100;
   };
 
   if (!currentTrack) return <></>;
@@ -197,6 +204,7 @@ export default function Bar() {
                   )}
                   type="range"
                   name="range"
+                  onChange={changeVolume}
                 />
               </div>
             </div>
