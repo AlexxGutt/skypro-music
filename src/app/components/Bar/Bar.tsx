@@ -3,7 +3,7 @@ import Link from 'next/link';
 import styles from './bar.module.css';
 import classnames from 'classnames';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
-import { use, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { setIsPlay } from '@/app/store/features/trackSlice';
 import { formatTime } from '@/app/utils/helper';
 
@@ -62,7 +62,6 @@ export default function Bar() {
   };
 
   const onLoadedMetadata = () => {
-    console.log('Start');
     if (audioRef.current) {
       setDuration(audioRef.current.duration);
       audioRef.current.play();
