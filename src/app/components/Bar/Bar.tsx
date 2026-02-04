@@ -4,13 +4,18 @@ import styles from './bar.module.css';
 import classnames from 'classnames';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import { setIsPlay } from '@/app/store/features/trackSlice';
+import {
+  setIsPlay,
+  setNextTrack,
+  setPrevTrack,
+} from '@/app/store/features/trackSlice';
 import { formatTime } from '@/app/utils/helper';
 import ProgressBar from '../ProgressBar/ProgressBar';
 
 export default function Bar() {
   const currentTrack = useAppSelector((state) => state.tracks.currentTrack);
   const isPlay = useAppSelector((state) => state.tracks.isPlay);
+  const playlist = useAppSelector((state) => state.tracks.playlist);
 
   const [isLoop, setIsLoop] = useState(false);
   const [isLoadedTrack, setIsLoadedTrack] = useState(false);
@@ -36,7 +41,7 @@ export default function Bar() {
     if (!currentTrack || !audioRef.current) return;
 
     setIsChangingTrack(true);
-    setIsLoadedTrack(false); // Сбрасываем состояние загрузки
+    setIsLoadedTrack(false);
     dispatch(setIsPlay(false));
 
     setTimeout(() => {
@@ -95,7 +100,50 @@ export default function Bar() {
   };
 
   const onEnded = () => {
-    dispatch(setIsPlay(false));
+    const currentIndex = playlist.findIndex(
+      (track) => track._id === currentTrack?._id,
+    );
+
+    if (currentIndex === playlist.length - 1) {
+      dispatch(setIsPlay(false));
+      if (audioRef.current) {
+        audioRef.current.currentTime = 0;
+        setCurrentTime(0);
+      }
+    } else {
+      dispatch(setNextTrack());
+    }
+  };
+
+  const onNextTrack = () => {
+    const currentIndex = playlist.findIndex(
+      (track) => track._id === currentTrack?._id,
+    );
+
+    if (currentIndex === playlist.length - 1) {
+      dispatch(setIsPlay(false));
+      if (audioRef.current) {
+        audioRef.current.currentTime = 0;
+        setCurrentTime(0);
+      }
+    } else {
+      dispatch(setNextTrack());
+    }
+  };
+
+  const onPrevTrack = () => {
+    if (!audioRef.current) return;
+
+    const currentIndex = playlist.findIndex(
+      (track) => track._id === currentTrack?._id,
+    );
+
+    if (currentIndex === 0) {
+      audioRef.current.currentTime = 0;
+      setCurrentTime(0);
+    } else {
+      dispatch(setPrevTrack());
+    }
   };
 
   if (!currentTrack) return <></>;
@@ -125,7 +173,10 @@ export default function Bar() {
           <div className={styles.bar__player}>
             <div className={styles.player__controls}>
               <div className={styles.player__btnPrev}>
-                <svg className={styles.player__btnPrevSvg}>
+                <svg
+                  onClick={onPrevTrack}
+                  className={styles.player__btnPrevSvg}
+                >
                   <use xlinkHref="/img/icon/sprite.svg#icon-prev"></use>
                 </svg>
               </div>
@@ -144,7 +195,10 @@ export default function Bar() {
                 </svg>
               </div>
               <div className={styles.player__btnNext}>
-                <svg className={styles.player__btnNextSvg}>
+                <svg
+                  onClick={onNextTrack}
+                  className={styles.player__btnNextSvg}
+                >
                   <use xlinkHref="/img/icon/sprite.svg#icon-next"></use>
                 </svg>
               </div>
@@ -229,7 +283,7 @@ export default function Bar() {
                 </>
               ) : (
                 <div className={styles.loader}>
-                  Загрузка
+                  Загрузка трека
                   <span className={styles.dot1}>.</span>
                   <span className={styles.dot2}>.</span>
                   <span className={styles.dot3}>.</span>

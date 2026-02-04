@@ -84,6 +84,7 @@
 .player__btnPrevSvg {
   width: 15px;
   height: 14px;
+  cursor: pointer;
 }
 
 .bar__volumeBlock {
@@ -117,6 +118,7 @@
   height: 14px;
   fill: inherit;
   stroke: #d9d9d9;
+  cursor: pointer;
 }
 
 .player__btnRepeat {
