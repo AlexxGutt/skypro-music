@@ -36,6 +36,7 @@ export default function Bar() {
     if (!currentTrack || !audioRef.current) return;
 
     setIsChangingTrack(true);
+    setIsLoadedTrack(false); // Сбрасываем состояние загрузки
     dispatch(setIsPlay(false));
 
     setTimeout(() => {
@@ -65,9 +66,18 @@ export default function Bar() {
   const onLoadedMetadata = () => {
     if (audioRef.current) {
       setDuration(audioRef.current.duration);
+      setIsLoadedTrack(true);
       audioRef.current.play();
       dispatch(setIsPlay(true));
     }
+  };
+
+  const onLoadStart = () => {
+    setIsLoadedTrack(false);
+  };
+
+  const onCanPlay = () => {
+    setIsLoadedTrack(true);
   };
 
   const changeVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -99,6 +109,8 @@ export default function Bar() {
         style={{ display: 'none' }}
         onTimeUpdate={onTimeUpdate}
         onLoadedMetadata={onLoadedMetadata}
+        onLoadStart={onLoadStart}
+        onCanPlay={onCanPlay}
         onEnded={onEnded}
       ></audio>
       <div className={styles.bar__content}>
@@ -205,13 +217,24 @@ export default function Bar() {
           </div>
           <div className={styles.bar__volumeBlock}>
             <div className={styles.timeDisplay}>
-              <span className={styles.timeCurrent}>
-                {formatTime(currentTime)}
-              </span>
-              <span className={styles.timeSeparator}> / </span>
-              <span className={styles.timeDuration}>
-                {formatTime(duration)}
-              </span>
+              {isLoadedTrack ? (
+                <>
+                  <span className={styles.timeCurrent}>
+                    {formatTime(currentTime)}
+                  </span>
+                  <span className={styles.timeSeparator}> / </span>
+                  <span className={styles.timeDuration}>
+                    {formatTime(duration)}
+                  </span>
+                </>
+              ) : (
+                <div className={styles.loader}>
+                  Загрузка
+                  <span className={styles.dot1}>.</span>
+                  <span className={styles.dot2}>.</span>
+                  <span className={styles.dot3}>.</span>
+                </div>
+              )}
             </div>
             <div className={styles.volume__content}>
               <div className={styles.volume__image}>

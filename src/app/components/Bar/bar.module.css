@@ -402,3 +402,42 @@
 .player__btnRepeat.active:hover .player__btnRepeatSvg {
   stroke: #ffffff !important;
 }
+
+.loader {
+  display: flex;
+  align-items: center;
+  color: #b1b1b1;
+  font-family: 'StratosSkyeng', sans-serif;
+  font-size: 14px;
+  min-width: 120px;
+  justify-content: center;
+}
+
+.dot1,
+.dot2,
+.dot3 {
+  opacity: 0;
+  animation: dotAnimation 1.5s infinite;
+}
+
+.dot1 {
+  animation-delay: 0s;
+}
+
+.dot2 {
+  animation-delay: 0.2s;
+}
+
+.dot3 {
+  animation-delay: 0.4s;
+}
+
+@keyframes dotAnimation {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
