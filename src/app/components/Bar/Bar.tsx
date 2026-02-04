@@ -84,6 +84,10 @@ export default function Bar() {
     }
   };
 
+  const onEnded = () => {
+    dispatch(setIsPlay(false));
+  };
+
   if (!currentTrack) return <></>;
 
   return (
@@ -95,6 +99,7 @@ export default function Bar() {
         style={{ display: 'none' }}
         onTimeUpdate={onTimeUpdate}
         onLoadedMetadata={onLoadedMetadata}
+        onEnded={onEnded}
       ></audio>
       <div className={styles.bar__content}>
         <ProgressBar
@@ -133,10 +138,14 @@ export default function Bar() {
               </div>
               <div
                 onClick={onToggleLoop}
-                className={classnames(styles.player__btnRepeat, styles.btnIcon)}
+                className={classnames(
+                  styles.player__btnRepeat,
+                  styles.btnIcon,
+                  isLoop && styles.active,
+                )}
               >
                 <svg className={styles.player__btnRepeatSvg}>
-                  <use xlinkHref="/img/icon/sprite.svg#icon-repeat"></use>
+                  <use xlinkHref={'/img/icon/sprite.svg#icon-repeat'}></use>
                 </svg>
               </div>
               <div
