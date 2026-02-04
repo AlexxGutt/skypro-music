@@ -3,9 +3,10 @@ import Link from 'next/link';
 import styles from './bar.module.css';
 import classnames from 'classnames';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
-import { useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { setIsPlay } from '@/app/store/features/trackSlice';
 import { formatTime } from '@/app/utils/helper';
+import ProgressBar from '../ProgressBar/ProgressBar';
 
 export default function Bar() {
   const currentTrack = useAppSelector((state) => state.tracks.currentTrack);
@@ -75,6 +76,14 @@ export default function Bar() {
     if (audioRef.current) audioRef.current.volume = eVolume / 100;
   };
 
+  const onChangeProgress = (e: ChangeEvent<HTMLInputElement>) => {
+    if (audioRef.current) {
+      const inputTime = Number(e.target.value);
+
+      audioRef.current.currentTime = inputTime;
+    }
+  };
+
   if (!currentTrack) return <></>;
 
   return (
@@ -83,12 +92,18 @@ export default function Bar() {
         ref={audioRef}
         loop={isLoop}
         controls
-        // style={{ display: 'none' }}
+        style={{ display: 'none' }}
         onTimeUpdate={onTimeUpdate}
         onLoadedMetadata={onLoadedMetadata}
       ></audio>
       <div className={styles.bar__content}>
-        <div className={styles.bar__playerProgress}></div>
+        <ProgressBar
+          max={audioRef.current?.duration || 0}
+          step={0.1}
+          readOnly={!isLoadedTrack}
+          value={currentTime}
+          onChange={onChangeProgress}
+        />
         <div className={styles.bar__playerBlock}>
           <div className={styles.bar__player}>
             <div className={styles.player__controls}>
@@ -145,12 +160,12 @@ export default function Bar() {
                 </div>
                 <div className={styles.trackPlay__author}>
                   <Link className={styles.trackPlay__authorLink} href="">
-                    {currentTrack.name} {/* Название трека */}
+                    {currentTrack.name}
                   </Link>
                 </div>
                 <div className={styles.trackPlay__album}>
                   <Link className={styles.trackPlay__albumLink} href="">
-                    {currentTrack.author} {/* Исполнитель */}
+                    {currentTrack.author}
                   </Link>
                 </div>
               </div>
