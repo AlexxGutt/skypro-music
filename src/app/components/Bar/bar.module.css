@@ -84,6 +84,7 @@
 .player__btnPrevSvg {
   width: 15px;
   height: 14px;
+  cursor: pointer;
 }
 
 .bar__volumeBlock {
@@ -117,6 +118,7 @@
   height: 14px;
   fill: inherit;
   stroke: #d9d9d9;
+  cursor: pointer;
 }
 
 .player__btnRepeat {
@@ -357,5 +359,93 @@
     border-color: #ad61ff;
     color: #ad61ff;
     cursor: pointer;
+  }
+}
+
+.timeDisplay {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+  font-family: 'StratosSkyeng', sans-serif;
+  font-size: 14px;
+  color: #696969;
+  white-space: nowrap;
+}
+
+.timeCurrent {
+  color: #b1b1b1;
+  min-width: 40px;
+  text-align: right;
+}
+
+.timeSeparator {
+  margin: 0 4px;
+  color: #b1b1b1;
+}
+
+.timeDuration {
+  color: #696969;
+  min-width: 40px;
+  text-align: left;
+}
+
+.timeDisplay {
+  display: flex;
+  align-items: center;
+}
+
+.timeDuration {
+  min-width: 40px;
+}
+
+.player__btnRepeat.active .player__btnRepeatSvg {
+  stroke: #ffffff !important;
+}
+.player__btnRepeat.active:hover .player__btnRepeatSvg {
+  stroke: #ffffff !important;
+}
+.player__btnShuffle.active .player__btnShuffleSvg {
+  stroke: #ffffff !important;
+}
+.player__btnShuffle.active:hover .player__btnShuffleSvg {
+  stroke: #ffffff !important;
+}
+
+.loader {
+  display: flex;
+  align-items: center;
+  color: #b1b1b1;
+  font-family: 'StratosSkyeng', sans-serif;
+  font-size: 14px;
+  min-width: 120px;
+  justify-content: center;
+}
+
+.dot1,
+.dot2,
+.dot3 {
+  opacity: 0;
+  animation: dotAnimation 1.5s infinite;
+}
+
+.dot1 {
+  animation-delay: 0s;
+}
+
+.dot2 {
+  animation-delay: 0.2s;
+}
+
+.dot3 {
+  animation-delay: 0.4s;
+}
+
+@keyframes dotAnimation {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
   }
 }
