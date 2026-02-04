@@ -404,6 +404,12 @@
 .player__btnRepeat.active:hover .player__btnRepeatSvg {
   stroke: #ffffff !important;
 }
+.player__btnShuffle.active .player__btnShuffleSvg {
+  stroke: #ffffff !important;
+}
+.player__btnShuffle.active:hover .player__btnShuffleSvg {
+  stroke: #ffffff !important;
+}
 
 .loader {
   display: flex;

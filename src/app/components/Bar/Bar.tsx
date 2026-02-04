@@ -8,6 +8,7 @@ import {
   setIsPlay,
   setNextTrack,
   setPrevTrack,
+  toggleShuffle,
 } from '@/app/store/features/trackSlice';
 import { formatTime } from '@/app/utils/helper';
 import ProgressBar from '../ProgressBar/ProgressBar';
@@ -18,6 +19,7 @@ export default function Bar() {
   const playlist = useAppSelector((state) => state.tracks.playlist);
 
   const [isLoop, setIsLoop] = useState(false);
+  const [isShuffle, setIsShuffle] = useState(false);
   const [isLoadedTrack, setIsLoadedTrack] = useState(false);
   const [volume, setVolume] = useState(0.5);
   const [currentTime, setCurrentTime] = useState(0);
@@ -146,6 +148,11 @@ export default function Bar() {
     }
   };
 
+  const onShuffle = () => {
+    dispatch(toggleShuffle());
+    setIsShuffle(!isShuffle);
+  };
+
   if (!currentTrack) return <></>;
 
   return (
@@ -215,9 +222,11 @@ export default function Bar() {
                 </svg>
               </div>
               <div
+                onClick={onShuffle}
                 className={classnames(
                   styles.player__btnShuffle,
                   styles.btnIcon,
+                  isShuffle && styles.active,
                 )}
               >
                 <svg className={styles.player__btnShuffleSvg}>
