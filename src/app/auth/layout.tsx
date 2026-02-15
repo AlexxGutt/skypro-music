@@ -1,5 +1,5 @@
-import Link from 'next/link';
 import { ReactNode } from 'react';
+import styles from './layout.module.css';
 
 interface AuthLayoutProps {
   children: ReactNode;
@@ -8,9 +8,13 @@ interface AuthLayoutProps {
 export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
     <>
-      <Link href={'/auth/signin'}>Auth</Link>
-      <Link href={'/auth/signup'}>Reg</Link>
-      {children}
+      <div className={styles.wrapper}>
+        <div className={styles.containerEnter}>
+          <div className={styles.modal__block}>
+            <form className={styles.modal__form}>{children}</form>
+          </div>
+        </div>
+      </div>
     </>
   );
 }
