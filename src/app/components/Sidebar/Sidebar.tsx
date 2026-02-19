@@ -7,7 +7,7 @@ export default function Sidebar() {
       <div className={styles.sidebar__personal}>
         <p className={styles.sidebar__personalName}>Sergey.Ivanov</p>
         <div className={styles.sidebar__icon}>
-          <Link href="auth/signin">
+          <Link href="/auth/signin">
             <svg>
               <use xlinkHref="/img/icon/sprite.svg#logout"></use>
             </svg>

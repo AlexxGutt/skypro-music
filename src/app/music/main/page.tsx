@@ -1,8 +1,8 @@
 import styles from './page.module.css';
-import Bar from './components/Bar/Bar';
-import Sidebar from './components/Sidebar/Sidebar';
-import Centerblock from './components/Centerblock/Centerblock';
-import Nav from './components/Nav/Nav';
+import Bar from '../../components/Bar/Bar';
+import Sidebar from '../../components/Sidebar/Sidebar';
+import Centerblock from '../../components/Centerblock/Centerblock';
+import Nav from '../../components/Nav/Nav';
 
 export default function Home() {
   return (

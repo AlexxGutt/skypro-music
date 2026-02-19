@@ -29,7 +29,7 @@ export default function Signin() {
 
       if (result.success && result.user) {
         localStorage.setItem('user', JSON.stringify(result.user));
-        router.push('/');
+        router.push('/music/main');
       } else {
         setError(result.error || 'Ошибка при входе');
       }
