@@ -43,7 +43,6 @@ export async function signUp(userData: SignUpData): Promise<SignUpResult> {
     };
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response) {
-      // Просто берем то, что пришло от бэка
       const backendError = error.response.data as { message?: string };
 
       return {

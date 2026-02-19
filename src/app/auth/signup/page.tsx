@@ -18,11 +18,12 @@ export default function SignUp() {
   const [error, setError] = useState('');
 
   const handleSubmit = async () => {
+    if (!email.trim() || !password.trim() || !username.trim()) {
+      setError('Заполните все поля');
+      return;
+    }
+
     setLoading(true);
-    setError('');
-    setEmail('');
-    setPassword('');
-    setUsername('');
 
     try {
       const result = await signUp({
@@ -43,6 +44,15 @@ export default function SignUp() {
     }
   };
 
+  const handleInputChange =
+    (setter: (value: string) => void) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setter(e.target.value);
+      if (error) {
+        setError('');
+      }
+    };
+
   return (
     <div>
       <Link href="/music/main">
@@ -54,11 +64,23 @@ export default function SignUp() {
       <input
         className={classNames(styles.modal__input, styles.login)}
         type="text"
-        name="login"
+        name="username"
+        placeholder="Имя пользователя"
+        value={username}
+        onChange={handleInputChange(setUsername)}
+        disabled={loading}
+        autoComplete="username"
+      />
+
+      <input
+        className={styles.modal__input}
+        type="email"
+        name="email"
         placeholder="Почта"
         value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        onChange={handleInputChange(setEmail)}
         disabled={loading}
+        autoComplete="email"
       />
 
       <input
@@ -67,27 +89,18 @@ export default function SignUp() {
         name="password"
         placeholder="Пароль"
         value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        onChange={handleInputChange(setPassword)}
         disabled={loading}
+        autoComplete="new-password"
       />
 
-      <input
-        className={styles.modal__input}
-        type="text"
-        name="username"
-        placeholder="Имя пользователя"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        disabled={loading}
-      />
-
-      {/* Только вывод ошибок */}
       {error && <div className={styles.errorContainer}>{error}</div>}
 
       <button
         className={styles.modal__btnSignupEnt}
         onClick={handleSubmit}
         disabled={loading}
+        type="button"
       >
         {loading ? 'Регистрация...' : 'Зарегистрироваться'}
       </button>
