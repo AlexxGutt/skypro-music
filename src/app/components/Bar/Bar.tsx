@@ -33,7 +33,9 @@ export default function Bar() {
     if (!audioRef.current || isChangingTrack) return;
 
     if (isPlay) {
-      audioRef.current.play();
+      audioRef.current.play().catch(() => {
+        // Игнорируем ошибки воспроизведения, они обрабатываются в onStalled
+      });
     } else {
       audioRef.current.pause();
     }
@@ -48,6 +50,7 @@ export default function Bar() {
 
     setTimeout(() => {
       audioRef.current!.src = currentTrack.track_file;
+      audioRef.current!.load(); // Добавляем принудительную загрузку
       setTimeout(() => {
         dispatch(setIsPlay(true));
         setIsChangingTrack(false);
@@ -74,7 +77,7 @@ export default function Bar() {
     if (audioRef.current) {
       setDuration(audioRef.current.duration);
       setIsLoadedTrack(true);
-      audioRef.current.play();
+      audioRef.current.play().catch(() => {});
       dispatch(setIsPlay(true));
     }
   };
@@ -87,6 +90,27 @@ export default function Bar() {
     setIsLoadedTrack(true);
   };
 
+  // Добавляем обработчик для буферизации
+  const onStalled = () => {
+    if (audioRef.current && isPlay) {
+      // Пробуем восстановить воспроизведение при зависании
+      setTimeout(() => {
+        if (audioRef.current && isPlay) {
+          audioRef.current.play().catch(() => {});
+        }
+      }, 100);
+    }
+  };
+
+  const onWaiting = () => {
+    // Показываем индикатор загрузки при ожидании данных
+    setIsLoadedTrack(false);
+  };
+
+  const onPlaying = () => {
+    setIsLoadedTrack(true);
+  };
+
   const changeVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
     const eVolume = Number(e.target.value);
     setVolume(eVolume);
@@ -96,7 +120,6 @@ export default function Bar() {
   const onChangeProgress = (e: ChangeEvent<HTMLInputElement>) => {
     if (audioRef.current) {
       const inputTime = Number(e.target.value);
-
       audioRef.current.currentTime = inputTime;
     }
   };
@@ -167,6 +190,10 @@ export default function Bar() {
         onLoadStart={onLoadStart}
         onCanPlay={onCanPlay}
         onEnded={onEnded}
+        onStalled={onStalled} // Добавлено
+        onWaiting={onWaiting} // Добавлено
+        onPlaying={onPlaying} // Добавлено
+        preload="auto" // Добавлено
       ></audio>
       <div className={styles.bar__content}>
         <ProgressBar
