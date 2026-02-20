@@ -11,7 +11,7 @@ module.exports = {
     return [
       {
         source: '/',
-        destination: '/music/main',
+        destination: '/auth/signin',
         permanent: true,
       },
     ];

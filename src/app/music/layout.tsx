@@ -8,7 +8,7 @@ interface AuthLayoutProps {
   children: ReactNode;
 }
 
-export default function AuthLayout({ children }: AuthLayoutProps) {
+export default function MainLayout({ children }: AuthLayoutProps) {
   return (
     <>
       <div className={styles.wrapper}>
