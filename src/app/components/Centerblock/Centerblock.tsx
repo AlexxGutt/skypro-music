@@ -9,17 +9,19 @@ interface CenterblockProps {
   tracks: TrackType[];
   isLoading: boolean;
   error: string | null;
+  title?: string;
 }
 
 export default function Centerblock({
   tracks,
   isLoading,
   error,
+  title = 'Треки',
 }: CenterblockProps) {
   return (
     <div className={styles.centerblock}>
       <Search />
-      <h2 className={styles.centerblock__h2}>Треки</h2>
+      <h2 className={styles.centerblock__h2}>{title}</h2>
       <Filter tracks={tracks} />
       <div className={styles.centerblock__content}>
         <div className={styles.content__title}>
@@ -42,7 +44,7 @@ export default function Centerblock({
         {isLoading ? (
           <div className={styles.centerblock__status}>
             <div className={styles.loader}>
-              <span>Загрузка треков</span>
+              <span>Загрузка подборки</span>
               <span className={styles.dot1}>.</span>
               <span className={styles.dot2}>.</span>
               <span className={styles.dot3}>.</span>
@@ -59,6 +61,10 @@ export default function Centerblock({
                 Попробовать снова
               </button>
             </div>
+          </div>
+        ) : tracks.length === 0 ? (
+          <div className={styles.centerblock__status}>
+            <div className={styles.empty}>В этой подборке пока нет треков</div>
           </div>
         ) : (
           <Track tracks={tracks} />

@@ -23,7 +23,7 @@ export default function Track({ tracks }: TrackProps) {
   const onClickTrack = (track: TrackType) => {
     dispatch(setCurrentTrack(track));
     dispatch(setIsPlay(true));
-    dispatch(setPlayList(tracks)); // Используем актуальные треки из API
+    dispatch(setPlayList(tracks));
   };
 
   if (!tracks || tracks.length === 0) {

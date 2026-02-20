@@ -1,8 +1,9 @@
 'use client';
 import { useEffect, useState } from 'react';
-import Centerblock from '../../components/Centerblock/Centerblock';
+import Centerblock from '@/app/components/Centerblock/Centerblock';
 import { getTracks } from '@/app/services/tracks/tracksApi';
 import { TrackType } from '@/app/sharedTypes/sharedTypes';
+import styles from './page.module.css';
 import { AxiosError } from 'axios';
 
 export default function Home() {
@@ -11,13 +12,14 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setIsLoading(true);
-    getTracks()
-      .then((res) => {
-        setTracks(res);
+    const fetchTracks = async () => {
+      setIsLoading(true);
+
+      try {
+        const data = await getTracks();
+        setTracks(data);
         setError(null);
-      })
-      .catch((error) => {
+      } catch (error) {
         if (error instanceof AxiosError) {
           if (error.response) {
             setError(error.response.data);
@@ -29,15 +31,17 @@ export default function Home() {
         } else {
           setError('Произошла ошибка при загрузке');
         }
-      })
-      .finally(() => {
+      } finally {
         setIsLoading(false);
-      });
+      }
+    };
+
+    fetchTracks();
   }, []);
 
   return (
-    <>
+    <div className={styles.main}>
       <Centerblock tracks={tracks} isLoading={isLoading} error={error} />
-    </>
+    </div>
   );
 }
