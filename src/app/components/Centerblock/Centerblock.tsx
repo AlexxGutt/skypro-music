@@ -3,13 +3,26 @@ import Search from '../Search/Search';
 import Track from '../Track/Track';
 import Filter from '../Filter/Filter';
 import classnames from 'classnames';
+import { TrackType } from '@/app/sharedTypes/sharedTypes';
 
-export default function Centerblock() {
+interface CenterblockProps {
+  tracks: TrackType[];
+  isLoading: boolean;
+  error: string | null;
+  title?: string;
+}
+
+export default function Centerblock({
+  tracks,
+  isLoading,
+  error,
+  title = 'Треки',
+}: CenterblockProps) {
   return (
     <div className={styles.centerblock}>
       <Search />
-      <h2 className={styles.centerblock__h2}>Треки</h2>
-      <Filter />
+      <h2 className={styles.centerblock__h2}>{title}</h2>
+      <Filter tracks={tracks} />
       <div className={styles.centerblock__content}>
         <div className={styles.content__title}>
           <div className={classnames(styles.playlistTitle__col, styles.col01)}>
@@ -27,7 +40,35 @@ export default function Centerblock() {
             </svg>
           </div>
         </div>
-        <Track />
+
+        {isLoading ? (
+          <div className={styles.centerblock__status}>
+            <div className={styles.loader}>
+              <span>Загрузка подборки</span>
+              <span className={styles.dot1}>.</span>
+              <span className={styles.dot2}>.</span>
+              <span className={styles.dot3}>.</span>
+            </div>
+          </div>
+        ) : error ? (
+          <div className={styles.centerblock__status}>
+            <div className={styles.error}>
+              <span className={styles.error__message}>{error}</span>
+              <button
+                className={styles.error__retry}
+                onClick={() => window.location.reload()}
+              >
+                Попробовать снова
+              </button>
+            </div>
+          </div>
+        ) : tracks.length === 0 ? (
+          <div className={styles.centerblock__status}>
+            <div className={styles.empty}>В этой подборке пока нет треков</div>
+          </div>
+        ) : (
+          <Track tracks={tracks} />
+        )}
       </div>
     </div>
   );

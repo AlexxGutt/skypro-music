@@ -1,3 +1,4 @@
+'use client';
 import styles from './sidebar.module.css';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -7,7 +8,7 @@ export default function Sidebar() {
       <div className={styles.sidebar__personal}>
         <p className={styles.sidebar__personalName}>Sergey.Ivanov</p>
         <div className={styles.sidebar__icon}>
-          <Link href="/signin">
+          <Link href="/auth/signin">
             <svg>
               <use xlinkHref="/img/icon/sprite.svg#logout"></use>
             </svg>
@@ -17,7 +18,7 @@ export default function Sidebar() {
       <div className={styles.sidebar__block}>
         <div className={styles.sidebar__list}>
           <div className={styles.sidebar__item}>
-            <Link className={styles.sidebar__link} href="#">
+            <Link className={styles.sidebar__link} href="/music/category/2">
               <Image
                 className={styles.sidebar__img}
                 src="/img/playlist01.png"
@@ -28,7 +29,7 @@ export default function Sidebar() {
             </Link>
           </div>
           <div className={styles.sidebar__item}>
-            <Link className={styles.sidebar__link} href="#">
+            <Link className={styles.sidebar__link} href="/music/category/3">
               <Image
                 className={styles.sidebar__img}
                 src="/img/playlist02.png"
@@ -39,7 +40,7 @@ export default function Sidebar() {
             </Link>
           </div>
           <div className={styles.sidebar__item}>
-            <Link className={styles.sidebar__link} href="#">
+            <Link className={styles.sidebar__link} href="/music/category/4">
               <Image
                 className={styles.sidebar__img}
                 src="/img/playlist03.png"

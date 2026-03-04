@@ -1,5 +1,5 @@
+// components/Track/Track.tsx
 'use client';
-import { data } from '@/app/data';
 import styles from './track.module.css';
 import Link from 'next/link';
 import { formatTime } from '@/app/utils/helper';
@@ -11,7 +11,11 @@ import {
 } from '@/app/store/features/trackSlice';
 import { TrackType } from '@/app/sharedTypes/sharedTypes';
 
-export default function Track() {
+interface TrackProps {
+  tracks: TrackType[];
+}
+
+export default function Track({ tracks }: TrackProps) {
   const dispatch = useAppDispatch();
   const currentTrack = useAppSelector((state) => state.tracks.currentTrack);
   const isPlay = useAppSelector((state) => state.tracks.isPlay);
@@ -19,13 +23,17 @@ export default function Track() {
   const onClickTrack = (track: TrackType) => {
     dispatch(setCurrentTrack(track));
     dispatch(setIsPlay(true));
-    dispatch(setPlayList(data));
+    dispatch(setPlayList(tracks));
   };
+
+  if (!tracks || tracks.length === 0) {
+    return <div className={styles.content__playlist}>Нет доступных треков</div>;
+  }
 
   return (
     <div className={styles.content__playlist}>
       <div className={styles.playlist__item}>
-        {data.map((track) => {
+        {tracks.map((track) => {
           const isCurrentTrack = currentTrack?._id === track._id;
 
           return (

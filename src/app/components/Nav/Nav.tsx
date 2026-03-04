@@ -12,16 +12,19 @@ export default function Nav() {
   };
   return (
     <nav className={styles.main__nav}>
-      <div className={styles.nav__logo}>
-        {/*TODO: img –> Image*/}
-        <Image
-          width={250}
-          height={170}
-          className={styles.logo__image}
-          src="/img/logo.png"
-          alt={'logo'}
-        />
-      </div>
+      <Link href="/">
+        <div className={styles.nav__logo}>
+          {/*TODO: img –> Image*/}
+          <Image
+            width={250}
+            height={170}
+            className={styles.logo__image}
+            src="/img/logo.png"
+            alt={'logo'}
+          />
+        </div>
+      </Link>
+
       <div onClick={toggleMenu} className={styles.nav__burger}>
         <span className={styles.burger__line}></span>
         <span className={styles.burger__line}></span>
@@ -33,7 +36,7 @@ export default function Nav() {
         <ul className={styles.menu__list}>
           <li className={styles.menu__item}>
             {/*TODO: a -> Link*/}
-            <Link href="#" className={styles.menu__link}>
+            <Link href="/" className={styles.menu__link}>
               Главное
             </Link>
           </li>
@@ -43,7 +46,7 @@ export default function Nav() {
             </Link>
           </li>
           <li className={styles.menu__item}>
-            <Link href="/signin" className={styles.menu__link}>
+            <Link href="/auth/signin" className={styles.menu__link}>
               Войти
             </Link>
           </li>

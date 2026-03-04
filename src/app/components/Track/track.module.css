@@ -7,6 +7,20 @@
   -ms-flex-direction: column;
   flex-direction: column;
   overflow-y: auto;
+  max-height: calc(100vh - 350px); /* Регулируйте это значение под ваш макет */
+  padding-bottom: 120px; /* Добавляем отступ снизу, чтобы треки не скрывались под прогресс баром */
+  box-sizing: border-box; /* Учитываем padding в расчете высоты */
+}
+
+/* Убираем стилизацию скроллбара для Chrome, Safari и Opera */
+.content__playlist::-webkit-scrollbar {
+  width: 0; /* Скрываем скроллбар */
+  background: transparent; /* Делаем прозрачным */
+}
+
+/* Для Firefox */
+.content__playlist {
+  scrollbar-width: none; /* Скрываем скроллбар в Firefox */
 }
 
 .playlist__item {
@@ -61,6 +75,7 @@
   justify-content: center;
   margin-right: 17px;
   margin-top: 5px;
+  position: relative;
 }
 
 .track__titleSvg {
@@ -134,13 +149,6 @@
   color: #696969;
 }
 
-.track__titleImage {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .track__pulsingDot {
   position: absolute;
   width: 16px;
@@ -152,6 +160,12 @@
 
 .track__pulsingDot.static {
   animation: none;
+  background-color: #ad61ff;
+}
+
+/* Добавляем отступ для последнего элемента, чтобы гарантировать пространство */
+.playlist__item:last-child {
+  margin-bottom: 120px; /* Дополнительный отступ для последнего трека */
 }
 
 @keyframes pulse {

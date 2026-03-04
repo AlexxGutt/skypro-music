@@ -24,7 +24,10 @@
   -webkit-box-direction: normal;
   -ms-flex-direction: column;
   flex-direction: column;
+  min-height: 400px;
+  position: relative;
 }
+
 .content__title {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -41,6 +44,7 @@
   justify-content: space-between;
   margin-bottom: 24px;
 }
+
 .playlistTitle__svg {
   width: 12px;
   height: 12px;
@@ -73,4 +77,130 @@
 .col04 {
   width: 60px;
   text-align: end;
+}
+
+.centerblock__status {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  min-height: 300px;
+  width: 100%;
+  margin-top: 40px;
+}
+
+.loader {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 32px;
+  color: #ffffff;
+  text-align: center;
+}
+
+.dot1,
+.dot2,
+.dot3 {
+  animation: blink 1.4s infinite;
+  animation-fill-mode: both;
+}
+
+.dot1 {
+  animation-delay: 0.2s;
+}
+
+.dot2 {
+  animation-delay: 0.4s;
+}
+
+.dot3 {
+  animation-delay: 0.6s;
+}
+
+@keyframes blink {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    opacity: 0.2;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+
+.error {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  gap: 16px;
+  padding: 32px;
+  background: rgba(49, 49, 49, 0.7);
+  border-radius: 12px;
+  border: 1px solid #ad61ff;
+}
+
+.error__icon {
+  font-size: 48px;
+  margin-bottom: 8px;
+}
+
+.error__message {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 24px;
+  color: #ffffff;
+  text-align: center;
+  max-width: 400px;
+}
+
+.error__retry {
+  margin-top: 8px;
+  padding: 12px 24px;
+  background: #ad61ff;
+  border: none;
+  border-radius: 6px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.error__retry:hover {
+  background: #8b4acb;
+}
+
+@media (max-width: 1366px) {
+  .centerblock {
+    padding: 20px 40px 20px 80px;
+  }
+
+  .col01 {
+    width: 350px;
+  }
+
+  .col02 {
+    width: 250px;
+  }
+
+  .col03 {
+    width: 200px;
+  }
 }

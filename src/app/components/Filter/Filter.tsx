@@ -1,19 +1,22 @@
-// components/Filter/Filter.tsx
 'use client';
 
 import { getUniqueValues } from '@/app/utils/helper';
 import styles from './filter.module.css';
-import { data } from '@/app/data';
 import { useState } from 'react';
 import FilterItems from '../FilterItem/FilterItems';
+import { TrackType } from '@/app/sharedTypes/sharedTypes';
 
-export default function Filter() {
+interface FilterProps {
+  tracks: TrackType[];
+}
+
+export default function Filter({ tracks }: FilterProps) {
   const [isArtistFilterOpen, setIsArtistFilterOpen] = useState(false);
   const [isYearFilterOpen, setIsYearFilterOpen] = useState(false);
   const [isGenreFilterOpen, setIsGenreFilterOpen] = useState(false);
 
-  const uniqueAuthors = getUniqueValues(data, 'author');
-  const uniqueGenre = getUniqueValues(data, 'genre');
+  const uniqueAuthors = getUniqueValues(tracks, 'author');
+  const uniqueGenre = getUniqueValues(tracks, 'genre');
 
   const yearOptions = ['Сначала новые', 'Сначала старые', 'По умолчанию'];
 

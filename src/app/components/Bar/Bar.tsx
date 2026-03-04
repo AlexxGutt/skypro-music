@@ -17,9 +17,9 @@ export default function Bar() {
   const currentTrack = useAppSelector((state) => state.tracks.currentTrack);
   const isPlay = useAppSelector((state) => state.tracks.isPlay);
   const playlist = useAppSelector((state) => state.tracks.playlist);
+  const isShuffle = useAppSelector((state) => state.tracks.isShuffle);
 
   const [isLoop, setIsLoop] = useState(false);
-  const [isShuffle, setIsShuffle] = useState(false);
   const [isLoadedTrack, setIsLoadedTrack] = useState(false);
   const [volume, setVolume] = useState(0.5);
   const [currentTime, setCurrentTime] = useState(0);
@@ -33,7 +33,7 @@ export default function Bar() {
     if (!audioRef.current || isChangingTrack) return;
 
     if (isPlay) {
-      audioRef.current.play();
+      audioRef.current.play().catch(() => {});
     } else {
       audioRef.current.pause();
     }
@@ -46,12 +46,12 @@ export default function Bar() {
     setIsLoadedTrack(false);
     dispatch(setIsPlay(false));
 
+    audioRef.current.src = currentTrack.track_file;
+    audioRef.current.load();
+
     setTimeout(() => {
-      audioRef.current!.src = currentTrack.track_file;
-      setTimeout(() => {
-        dispatch(setIsPlay(true));
-        setIsChangingTrack(false);
-      }, 300);
+      dispatch(setIsPlay(true));
+      setIsChangingTrack(false);
     }, 100);
   }, [currentTrack, dispatch]);
 
@@ -74,8 +74,9 @@ export default function Bar() {
     if (audioRef.current) {
       setDuration(audioRef.current.duration);
       setIsLoadedTrack(true);
-      audioRef.current.play();
-      dispatch(setIsPlay(true));
+      if (isPlay) {
+        audioRef.current.play().catch(() => {});
+      }
     }
   };
 
@@ -87,6 +88,47 @@ export default function Bar() {
     setIsLoadedTrack(true);
   };
 
+  const onStalled = () => {
+    if (audioRef.current && isPlay) {
+      setTimeout(() => {
+        if (audioRef.current && isPlay) {
+          audioRef.current.play().catch(() => {});
+        }
+      }, 100);
+    }
+  };
+
+  const onWaiting = () => {
+    setIsLoadedTrack(false);
+  };
+
+  const onPlaying = () => {
+    setIsLoadedTrack(true);
+  };
+
+  const onEnded = () => {
+    dispatch(setNextTrack());
+  };
+
+  const onNextTrack = () => {
+    dispatch(setNextTrack());
+  };
+
+  const onPrevTrack = () => {
+    if (!audioRef.current || !currentTrack) return;
+
+    const currentIndex = playlist.findIndex(
+      (track) => track._id === currentTrack?._id,
+    );
+
+    if (currentIndex === 0 && !isShuffle) {
+      audioRef.current.currentTime = 0;
+      setCurrentTime(0);
+    } else {
+      dispatch(setPrevTrack());
+    }
+  };
+
   const changeVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
     const eVolume = Number(e.target.value);
     setVolume(eVolume);
@@ -96,61 +138,12 @@ export default function Bar() {
   const onChangeProgress = (e: ChangeEvent<HTMLInputElement>) => {
     if (audioRef.current) {
       const inputTime = Number(e.target.value);
-
       audioRef.current.currentTime = inputTime;
-    }
-  };
-
-  const onEnded = () => {
-    const currentIndex = playlist.findIndex(
-      (track) => track._id === currentTrack?._id,
-    );
-
-    if (currentIndex === playlist.length - 1) {
-      dispatch(setIsPlay(false));
-      if (audioRef.current) {
-        audioRef.current.currentTime = 0;
-        setCurrentTime(0);
-      }
-    } else {
-      dispatch(setNextTrack());
-    }
-  };
-
-  const onNextTrack = () => {
-    const currentIndex = playlist.findIndex(
-      (track) => track._id === currentTrack?._id,
-    );
-
-    if (currentIndex === playlist.length - 1) {
-      dispatch(setIsPlay(false));
-      if (audioRef.current) {
-        audioRef.current.currentTime = 0;
-        setCurrentTime(0);
-      }
-    } else {
-      dispatch(setNextTrack());
-    }
-  };
-
-  const onPrevTrack = () => {
-    if (!audioRef.current) return;
-
-    const currentIndex = playlist.findIndex(
-      (track) => track._id === currentTrack?._id,
-    );
-
-    if (currentIndex === 0) {
-      audioRef.current.currentTime = 0;
-      setCurrentTime(0);
-    } else {
-      dispatch(setPrevTrack());
     }
   };
 
   const onShuffle = () => {
     dispatch(toggleShuffle());
-    setIsShuffle(!isShuffle);
   };
 
   if (!currentTrack) return <></>;
@@ -167,7 +160,11 @@ export default function Bar() {
         onLoadStart={onLoadStart}
         onCanPlay={onCanPlay}
         onEnded={onEnded}
-      ></audio>
+        onStalled={onStalled}
+        onWaiting={onWaiting}
+        onPlaying={onPlaying}
+        preload="auto"
+      />
       <div className={styles.bar__content}>
         <ProgressBar
           max={audioRef.current?.duration || 0}
@@ -313,6 +310,9 @@ export default function Bar() {
                   )}
                   type="range"
                   name="range"
+                  min="0"
+                  max="100"
+                  defaultValue="50"
                   onChange={changeVolume}
                 />
               </div>
