@@ -1,4 +1,3 @@
-// components/Track/Track.tsx
 'use client';
 import styles from './track.module.css';
 import Link from 'next/link';
