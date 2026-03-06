@@ -27,8 +27,7 @@ export default function Signin() {
     try {
       const result = await signIn({ email, password });
 
-      if (result.success && result.user) {
-        localStorage.setItem('user', JSON.stringify(result.user));
+      if (result.success) {
         router.push('/music/main');
       } else {
         setError(result.error || 'Ошибка при входе');
