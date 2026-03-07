@@ -1,15 +1,18 @@
+'use client';
 import { ReactNode } from 'react';
 import styles from './layout.module.css';
 import Nav from '../components/Nav/Nav';
 import Sidebar from '../components/Sidebar/Sidebar';
 import Bar from '../components/Bar/Bar';
 import FetchingTracks from '../components/FetchingTracks/FetchingTracks';
+import { useInitAuth } from '@/hooks/useInitAuth';
 
 interface AuthLayoutProps {
   children: ReactNode;
 }
 
 export default function MainLayout({ children }: AuthLayoutProps) {
+  useInitAuth();
   return (
     <>
       <div className={styles.wrapper}>

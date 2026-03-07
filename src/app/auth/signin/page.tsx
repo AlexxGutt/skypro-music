@@ -5,9 +5,12 @@ import { useRouter } from 'next/navigation';
 import styles from './signin.module.css';
 import classNames from 'classnames';
 import Link from 'next/link';
-import { signIn } from '../../services/auth/signInApi';
+import { getTokens, signIn } from '../../services/auth/signInApi';
+import { useAppDispatch } from '@/app/store/store';
+import { setAccess, setUsername } from '@/app/store/features/authSlice';
 
 export default function Signin() {
+  const dispatch = useAppDispatch();
   const router = useRouter();
 
   const [email, setEmail] = useState('');
@@ -27,7 +30,12 @@ export default function Signin() {
     try {
       const result = await signIn({ email, password });
 
-      if (result.success) {
+      if (result.success && result.user) {
+        dispatch(setUsername(result.user.username));
+        getTokens({ email, password }).then((res) => {
+          dispatch(setAccess(res.access));
+          dispatch(setAccess(res.refresh));
+        });
         router.push('/music/main');
       } else {
         setError(result.error || 'Ошибка при входе');

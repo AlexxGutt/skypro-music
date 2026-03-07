@@ -52,8 +52,8 @@ export const getTokens = (data: SignInData): Promise<tokensType> => {
   return axios.post(BASE_URL + '/user/token/', data).then((res) => res.data);
 };
 
-export const refreshToken = (data: SignInData): Promise<accessTokenType> => {
+export const refreshToken = (refresh: string): Promise<accessTokenType> => {
   return axios
-    .post(BASE_URL + '/user/token/refresh', data)
+    .post(BASE_URL + '/user/token/refresh', { refresh })
     .then((res) => res.data);
 };

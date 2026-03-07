@@ -2,11 +2,13 @@
 import styles from './sidebar.module.css';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useAppSelector } from '@/app/store/store';
 export default function Sidebar() {
+  const username = useAppSelector((state) => state.auth.username);
   return (
     <div className={styles.main__sidebar}>
       <div className={styles.sidebar__personal}>
-        <p className={styles.sidebar__personalName}>Sergey.Ivanov</p>
+        <p className={styles.sidebar__personalName}>{username || 'Гость'}</p>
         <div className={styles.sidebar__icon}>
           <Link href="/auth/signin">
             <svg>

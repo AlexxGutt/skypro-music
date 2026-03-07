@@ -4,11 +4,21 @@ import Link from 'next/link';
 import Image from 'next/image';
 import styles from './nav.module.css';
 import { useState } from 'react';
+import { useAppDispatch } from '@/app/store/store';
+import { useRouter } from 'next/navigation';
+import { clearUser } from '@/app/store/features/authSlice';
 export default function Nav() {
+  const dispatch = useAppDispatch();
+  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const logout = () => {
+    dispatch(clearUser());
+    router.push('/auth/signin');
   };
   return (
     <nav className={styles.main__nav}>
@@ -46,9 +56,9 @@ export default function Nav() {
             </Link>
           </li>
           <li className={styles.menu__item}>
-            <Link href="/auth/signin" className={styles.menu__link}>
-              Войти
-            </Link>
+            <span onClick={logout} className={styles.menu__link}>
+              Выйти
+            </span>
           </li>
         </ul>
       </div>
