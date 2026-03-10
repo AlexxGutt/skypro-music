@@ -7,7 +7,11 @@ import classNames from 'classnames';
 import Link from 'next/link';
 import { getTokens, signIn } from '../../services/auth/signInApi';
 import { useAppDispatch } from '@/app/store/store';
-import { setAccess, setUsername } from '@/app/store/features/authSlice';
+import {
+  setAccess,
+  setRefresh,
+  setUsername,
+} from '@/app/store/features/authSlice';
 
 export default function Signin() {
   const dispatch = useAppDispatch();
@@ -34,7 +38,7 @@ export default function Signin() {
         dispatch(setUsername(result.user.username));
         getTokens({ email, password }).then((res) => {
           dispatch(setAccess(res.access));
-          dispatch(setAccess(res.refresh));
+          dispatch(setRefresh(res.refresh));
         });
         router.push('/music/main');
       } else {

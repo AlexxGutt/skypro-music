@@ -67,7 +67,11 @@ export default function Centerblock({
             <div className={styles.empty}>В этой подборке пока нет треков</div>
           </div>
         ) : (
-          <Track tracks={tracks} />
+          <div className={styles.content__playlist}>
+            {tracks.map((track) => (
+              <Track key={track._id} track={track} tracks={tracks} />
+            ))}
+          </div>
         )}
       </div>
     </div>
