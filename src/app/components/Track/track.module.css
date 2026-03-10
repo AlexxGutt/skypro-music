@@ -132,12 +132,25 @@
   color: #696969;
 }
 
+/* 👇 Добавляем курсор-указатель для области с лайком */
+.track__time {
+  display: flex;
+  align-items: center;
+  cursor: default; /* Для всей области время не меняем курсор */
+}
+
 .track__timeSvg {
   width: 14px;
   height: 12px;
   margin-right: 17px;
   fill: transparent;
   stroke: #696969;
+  cursor: pointer; /* 👈 КУРСОР-УКАЗАТЕЛЬ ДЛЯ ЛАЙКА */
+}
+
+/* Добавляем эффект при наведении для лучшего UX */
+.track__timeSvg:hover {
+  stroke: #ffffff; /* Белый цвет при наведении */
 }
 
 .track__timeText {
@@ -147,6 +160,7 @@
   line-height: 24px;
   text-align: right;
   color: #696969;
+  cursor: default; /* Для времени оставляем обычный курсор */
 }
 
 .track__pulsingDot {

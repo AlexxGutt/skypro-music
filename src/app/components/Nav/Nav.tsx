@@ -4,13 +4,16 @@ import Link from 'next/link';
 import Image from 'next/image';
 import styles from './nav.module.css';
 import { useState } from 'react';
-import { useAppDispatch } from '@/app/store/store';
+import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { useRouter } from 'next/navigation';
 import { clearUser } from '@/app/store/features/authSlice';
 export default function Nav() {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { access, refresh } = useAppSelector((state) => state.auth);
+
+  const isAuth = !!access && !!refresh;
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -18,6 +21,9 @@ export default function Nav() {
 
   const logout = () => {
     dispatch(clearUser());
+  };
+
+  const login = () => {
     router.push('/auth/signin');
   };
   return (
@@ -50,16 +56,26 @@ export default function Nav() {
               Главное
             </Link>
           </li>
-          <li className={styles.menu__item}>
-            <Link href="#" className={styles.menu__link}>
-              Мой плейлист
-            </Link>
-          </li>
-          <li className={styles.menu__item}>
-            <span onClick={logout} className={styles.menu__link}>
-              Выйти
-            </span>
-          </li>
+          {isAuth ? (
+            <>
+              <li className={styles.menu__item}>
+                <Link href="/favorites" className={styles.menu__link}>
+                  Мой плейлист
+                </Link>
+              </li>
+              <li className={styles.menu__item}>
+                <span onClick={logout} className={styles.menu__link}>
+                  Выйти
+                </span>
+              </li>
+            </>
+          ) : (
+            <li className={styles.menu__item}>
+              <span onClick={login} className={styles.menu__link}>
+                Войти
+              </span>
+            </li>
+          )}
         </ul>
       </div>
     </nav>
