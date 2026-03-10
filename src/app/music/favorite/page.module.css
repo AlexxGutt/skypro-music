@@ -1,4 +1,3 @@
-/* app/favorites/favorites.module.css */
 .pageContainer {
   display: flex;
   flex-direction: column;
@@ -50,11 +49,15 @@
   font-weight: 500;
   font-size: 15px;
   transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(88, 14, 162, 0.3);
 }
 
 .emptyLink:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(88, 14, 162, 0.4);
+  background: linear-gradient(135deg, #6a1ab3 0%, #8e3ad6 100%);
+  box-shadow: 0 8px 25px rgba(88, 14, 162, 0.5);
+  transform: none;
 }
 
 @keyframes fadeIn {
@@ -65,5 +68,28 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .messageContainer {
+    margin-top: 20px;
+  }
+
+  .emptyMessage {
+    padding: 30px 15px;
+  }
+
+  .emptyMessage p {
+    font-size: 16px;
+  }
+
+  .emptyHint {
+    font-size: 13px !important;
+  }
+
+  .emptyLink {
+    padding: 10px 24px;
+    font-size: 14px;
   }
 }

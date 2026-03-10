@@ -63,7 +63,7 @@ export default function TrackItem({ track, tracks }: TrackItemProps) {
       </div>
       <div className="track__time">
         <svg
-          className={styles.track__timeSvg}
+          className={`${styles.track__timeSvg} ${isLike ? styles.track__timeSvgLiked : ''}`}
           onClick={(e) => {
             e.stopPropagation();
             toggleLike();

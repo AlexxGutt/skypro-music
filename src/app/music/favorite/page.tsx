@@ -16,13 +16,12 @@ export default function FavoritesPage() {
 
   if (!access) {
     return (
-      <div className={styles.pageContainer}>
-        <Centerblock
-          tracks={[]}
-          isLoading={false}
-          error={null}
-          title="Избранные треки"
-        />
+      <Centerblock
+        tracks={[]}
+        isLoading={false}
+        error={null}
+        title="Избранные треки"
+      >
         <div className={styles.messageContainer}>
           <div className={styles.emptyMessage}>
             <p>Войдите в аккаунт, чтобы увидеть избранные треки</p>
@@ -31,19 +30,18 @@ export default function FavoritesPage() {
             </a>
           </div>
         </div>
-      </div>
+      </Centerblock>
     );
   }
 
   if (!fetchIsLoading && favoriteTracks.length === 0) {
     return (
-      <div className={styles.pageContainer}>
-        <Centerblock
-          tracks={[]}
-          isLoading={false}
-          error={null}
-          title="Избранные треки"
-        />
+      <Centerblock
+        tracks={[]}
+        isLoading={false}
+        error={null}
+        title="Избранные треки"
+      >
         <div className={styles.messageContainer}>
           <div className={styles.emptyMessage}>
             <p>У вас пока нет избранных треков</p>
@@ -55,7 +53,7 @@ export default function FavoritesPage() {
             </a>
           </div>
         </div>
-      </div>
+      </Centerblock>
     );
   }
 

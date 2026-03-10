@@ -191,3 +191,66 @@
     opacity: 0.8;
   }
 }
+
+.track__timeSvg {
+  width: 14px;
+  height: 12px;
+  margin-right: 17px;
+  fill: transparent;
+  stroke: #696969;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.track__timeSvg:hover {
+  stroke: #ffffff;
+}
+
+.track__timeSvgLiked {
+  fill: #ad61ff;
+  stroke: #ad61ff;
+}
+
+.track__timeSvgLiked:hover {
+  fill: #c08aff;
+  stroke: #c08aff;
+}
+
+.track__timeText {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: right;
+  color: #696969;
+  cursor: default;
+}
+
+.track__pulsingDot {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #ad61ff;
+  animation: pulse 2s infinite;
+}
+
+.track__pulsingDot.static {
+  animation: none;
+  background-color: #ad61ff;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+}

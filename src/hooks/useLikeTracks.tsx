@@ -7,7 +7,7 @@ import {
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { withReauth } from '@/app/utils/withReAuth';
 import { AxiosError } from 'axios';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 
 type returnTypeHook = {
   isLoading: boolean;
@@ -21,7 +21,11 @@ export const useLikeTrack = (track: TrackType | null): returnTypeHook => {
   const { access, refresh } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
-  const isLike = favoriteTracks.some((t) => t._id === track?._id);
+  const isLike = useMemo(() => {
+    if (!track) return false;
+    return favoriteTracks.some((t) => t._id === track._id);
+  }, [favoriteTracks, track]);
+
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
@@ -29,36 +33,36 @@ export const useLikeTrack = (track: TrackType | null): returnTypeHook => {
     if (!access) {
       return setErrorMsg('Нет авторизации');
     }
+    if (!track) return;
 
     const actionApi = isLike ? removeLike : addLike;
     const actionSlice = isLike ? removeLikedTracks : addLikedTracks;
 
     setIsLoading(true);
     setErrorMsg(null);
-    if (track) {
-      withReauth(
-        (newToken) => actionApi(newToken || access, track._id),
-        refresh,
-        dispatch,
-      )
-        .then(() => {
-          dispatch(actionSlice(track));
-        })
-        .catch((error) => {
-          if (error instanceof AxiosError) {
-            if (error.response) {
-              setErrorMsg(error.response.data.message);
-            } else if (error.request) {
-              setErrorMsg('Произошла ошибка. Попробуйте позже');
-            } else {
-              setErrorMsg('Неизвестная ошибка');
-            }
+
+    withReauth(
+      (newToken) => actionApi(newToken || access, track._id),
+      refresh,
+      dispatch,
+    )
+      .then(() => {
+        dispatch(actionSlice(track));
+      })
+      .catch((error) => {
+        if (error instanceof AxiosError) {
+          if (error.response) {
+            setErrorMsg(error.response.data.message);
+          } else if (error.request) {
+            setErrorMsg('Произошла ошибка. Попробуйте позже');
+          } else {
+            setErrorMsg('Неизвестная ошибка');
           }
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    }
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   return {

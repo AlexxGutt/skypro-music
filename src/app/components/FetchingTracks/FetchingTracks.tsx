@@ -38,6 +38,7 @@ export default function FetchingTracks() {
           dispatch(setFetchIsLoading(false));
         });
     }
-  }, []);
+  }, [dispatch, allTracks]);
+
   return <></>;
 }

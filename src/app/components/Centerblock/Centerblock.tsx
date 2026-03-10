@@ -1,15 +1,18 @@
+// app/components/Centerblock/Centerblock.tsx
 import styles from './centerblock.module.css';
 import Search from '../Search/Search';
 import Track from '../Track/Track';
 import Filter from '../Filter/Filter';
 import classnames from 'classnames';
 import { TrackType } from '@/app/sharedTypes/sharedTypes';
+import { ReactNode } from 'react';
 
 interface CenterblockProps {
   tracks: TrackType[];
   isLoading: boolean;
   error: string | null;
   title?: string;
+  children?: ReactNode;
 }
 
 export default function Centerblock({
@@ -17,6 +20,7 @@ export default function Centerblock({
   isLoading,
   error,
   title = 'Треки',
+  children,
 }: CenterblockProps) {
   return (
     <div className={styles.centerblock}>
@@ -64,7 +68,11 @@ export default function Centerblock({
           </div>
         ) : tracks.length === 0 ? (
           <div className={styles.centerblock__status}>
-            <div className={styles.empty}>В этой подборке пока нет треков</div>
+            {children || (
+              <div className={styles.empty}>
+                В этой подборке пока нет треков
+              </div>
+            )}
           </div>
         ) : (
           <div className={styles.content__playlist}>
