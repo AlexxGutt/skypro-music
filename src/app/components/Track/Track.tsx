@@ -21,11 +21,23 @@ export default function TrackItem({ track, tracks }: TrackItemProps) {
   const currentTrack = useAppSelector((state) => state.tracks.currentTrack);
   const isPlay = useAppSelector((state) => state.tracks.isPlay);
   const { toggleLike, isLike } = useLikeTrack(track);
+  const { access } = useAppSelector((state) => state.auth);
 
   const onClickTrack = () => {
     dispatch(setCurrentTrack(track));
     dispatch(setIsPlay(true));
     dispatch(setPlayList(tracks));
+  };
+
+  const handleLikeClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!access) {
+      alert('Войдите в аккаунт, чтобы добавлять треки в избранное');
+      return;
+    }
+    if (!currentTrack) return;
+
+    toggleLike();
   };
 
   const isCurrentTrack = currentTrack?._id === track._id;
@@ -64,10 +76,7 @@ export default function TrackItem({ track, tracks }: TrackItemProps) {
       <div className="track__time">
         <svg
           className={`${styles.track__timeSvg} ${isLike ? styles.track__timeSvgLiked : ''}`}
-          onClick={(e) => {
-            e.stopPropagation();
-            toggleLike();
-          }}
+          onClick={handleLikeClick}
         >
           <use
             xlinkHref={`/img/icon/sprite.svg#${isLike ? 'icon-like' : 'icon-dislike'}`}
