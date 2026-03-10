@@ -1,65 +1,70 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
-import Centerblock from '@/app/components/Centerblock/Centerblock';
-import { getCategoryTracks } from '@/app/services/tracks/tracksApi';
-import { TrackType } from '@/app/sharedTypes/sharedTypes';
-import { AxiosError } from 'axios';
 import { useAppSelector } from '@/app/store/store';
+import styles from './page.module.css';
 
-const categoryTitles: Record<string, string> = {
-  '2': 'Плейлист дня',
-  '3': '100 танцевальных хитов',
-  '4': 'Инди-заряд',
-};
+import Centerblock from '@/app/components/Centerblock/Centerblock';
+import { useFetchFavorites } from '@/hooks/useFetchFavorives';
 
-export default function CategoryPage() {
-  const params = useParams<{ id: string }>();
-  const id = params.id;
-  const { allTracks, fetchIsLoading } = useAppSelector((state) => state.tracks);
+export default function FavoritesPage() {
+  const { favoriteTracks, fetchIsLoading, fetchError } = useAppSelector(
+    (state) => state.tracks,
+  );
+  const { access } = useAppSelector((state) => state.auth);
 
-  const [tracks, setTracks] = useState<TrackType[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  useFetchFavorites();
 
-  useEffect(() => {
-    setIsLoading(true);
-    if (!fetchIsLoading) {
-      getCategoryTracks(id)
-        .then((categoryTrackIds) => {
-          const filteredTracks = allTracks.filter((track) =>
-            categoryTrackIds.includes(track._id),
-          );
-          setTracks(filteredTracks);
-        })
-        .catch((error) => {
-          if (error instanceof AxiosError) {
-            if (error.response) {
-              setError(
-                error.response.data?.message || 'Ошибка при загрузке подборки',
-              );
-            } else if (error.request) {
-              setError('Что-то с интернетом');
-            } else {
-              setError('Неизвестная ошибка');
-            }
-          } else {
-            setError('Произошла ошибка при загрузке');
-          }
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    }
-  }, [fetchIsLoading]);
+  if (!access) {
+    return (
+      <div className={styles.pageContainer}>
+        <Centerblock
+          tracks={[]}
+          isLoading={false}
+          error={null}
+          title="Избранные треки"
+        />
+        <div className={styles.messageContainer}>
+          <div className={styles.emptyMessage}>
+            <p>Войдите в аккаунт, чтобы увидеть избранные треки</p>
+            <a href="/signin" className={styles.emptyLink}>
+              Перейти к авторизации
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!fetchIsLoading && favoriteTracks.length === 0) {
+    return (
+      <div className={styles.pageContainer}>
+        <Centerblock
+          tracks={[]}
+          isLoading={false}
+          error={null}
+          title="Избранные треки"
+        />
+        <div className={styles.messageContainer}>
+          <div className={styles.emptyMessage}>
+            <p>У вас пока нет избранных треков</p>
+            <p className={styles.emptyHint}>
+              Нажмите на сердечко рядом с треком, чтобы добавить его в избранное
+            </p>
+            <a href="/" className={styles.emptyLink}>
+              Перейти к трекам
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <Centerblock
-      tracks={tracks}
-      isLoading={isLoading}
-      error={error}
-      title={categoryTitles[id] || 'Подборка'}
+      tracks={favoriteTracks}
+      isLoading={fetchIsLoading}
+      error={fetchError}
+      title="Избранные треки"
     />
   );
 }

@@ -7,20 +7,18 @@
   -ms-flex-direction: column;
   flex-direction: column;
   overflow-y: auto;
-  max-height: calc(100vh - 350px); /* Регулируйте это значение под ваш макет */
-  padding-bottom: 120px; /* Добавляем отступ снизу, чтобы треки не скрывались под прогресс баром */
-  box-sizing: border-box; /* Учитываем padding в расчете высоты */
+  max-height: calc(100vh - 350px);
+  padding-bottom: 120px;
+  box-sizing: border-box;
 }
 
-/* Убираем стилизацию скроллбара для Chrome, Safari и Opera */
 .content__playlist::-webkit-scrollbar {
-  width: 0; /* Скрываем скроллбар */
-  background: transparent; /* Делаем прозрачным */
+  width: 0;
+  background: transparent;
 }
 
-/* Для Firefox */
 .content__playlist {
-  scrollbar-width: none; /* Скрываем скроллбар в Firefox */
+  scrollbar-width: none;
 }
 
 .playlist__item {
@@ -132,11 +130,10 @@
   color: #696969;
 }
 
-/* 👇 Добавляем курсор-указатель для области с лайком */
 .track__time {
   display: flex;
   align-items: center;
-  cursor: default; /* Для всей области время не меняем курсор */
+  cursor: default;
 }
 
 .track__timeSvg {
@@ -145,12 +142,11 @@
   margin-right: 17px;
   fill: transparent;
   stroke: #696969;
-  cursor: pointer; /* 👈 КУРСОР-УКАЗАТЕЛЬ ДЛЯ ЛАЙКА */
+  cursor: pointer;
 }
 
-/* Добавляем эффект при наведении для лучшего UX */
 .track__timeSvg:hover {
-  stroke: #ffffff; /* Белый цвет при наведении */
+  stroke: #ffffff;
 }
 
 .track__timeText {
@@ -160,7 +156,7 @@
   line-height: 24px;
   text-align: right;
   color: #696969;
-  cursor: default; /* Для времени оставляем обычный курсор */
+  cursor: default;
 }
 
 .track__pulsingDot {
@@ -177,9 +173,8 @@
   background-color: #ad61ff;
 }
 
-/* Добавляем отступ для последнего элемента, чтобы гарантировать пространство */
 .playlist__item:last-child {
-  margin-bottom: 120px; /* Дополнительный отступ для последнего трека */
+  margin-bottom: 120px;
 }
 
 @keyframes pulse {

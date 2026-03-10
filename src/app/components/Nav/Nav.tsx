@@ -26,6 +26,10 @@ export default function Nav() {
   const login = () => {
     router.push('/auth/signin');
   };
+
+  const favoritePage = () => {
+    router.push('/music/favorite');
+  };
   return (
     <nav className={styles.main__nav}>
       <Link href="/">
@@ -59,9 +63,9 @@ export default function Nav() {
           {isAuth ? (
             <>
               <li className={styles.menu__item}>
-                <Link href="/favorites" className={styles.menu__link}>
+                <span onClick={favoritePage} className={styles.menu__link}>
                   Мой плейлист
-                </Link>
+                </span>
               </li>
               <li className={styles.menu__item}>
                 <span onClick={logout} className={styles.menu__link}>

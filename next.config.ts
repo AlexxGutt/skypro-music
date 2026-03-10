@@ -5,8 +5,8 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/',
-        destination: '/music/main', // 👈 Добавлен ведущий слеш
-        permanent: true, // 308 редирект (постоянный)
+        destination: '/music/main',
+        permanent: true,
       },
     ];
   },

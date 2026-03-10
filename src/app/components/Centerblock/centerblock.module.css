@@ -1,9 +1,11 @@
 .centerblock {
   width: auto;
-  -webkit-box-flex: 3;
-  -ms-flex-positive: 3;
   flex-grow: 3;
   padding: 20px 40px 20px 111px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
 }
 
 .centerblock__h2 {
@@ -14,35 +16,24 @@
   letter-spacing: -0.8px;
   margin-bottom: 45px;
   color: white;
+  flex-shrink: 0;
 }
 
 .centerblock__content {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
   flex-direction: column;
-  min-height: 400px;
+  flex: 1;
+  min-height: 0;
   position: relative;
 }
 
 .content__title {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: row;
   flex-direction: row;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
-  -webkit-box-pack: justify;
-  -ms-flex-pack: justify;
   justify-content: space-between;
   margin-bottom: 24px;
+  flex-shrink: 0;
 }
 
 .playlistTitle__svg {
@@ -79,19 +70,32 @@
   text-align: end;
 }
 
-.centerblock__status {
-  display: -webkit-box;
-  display: -ms-flexbox;
+.content__playlist {
   display: flex;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
+  flex-direction: column;
+
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+
+  padding-bottom: 120px;
+  box-sizing: border-box;
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.content__playlist::-webkit-scrollbar {
+  display: none;
+}
+
+.centerblock__status {
+  display: flex;
   justify-content: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
-  min-height: 300px;
+  flex: 1;
+  min-height: 0;
   width: 100%;
-  margin-top: 40px;
 }
 
 .loader {
@@ -136,26 +140,14 @@
 }
 
 .error {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
   flex-direction: column;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
   gap: 16px;
   padding: 32px;
   background: rgba(49, 49, 49, 0.7);
   border-radius: 12px;
   border: 1px solid #ad61ff;
-}
-
-.error__icon {
-  font-size: 48px;
-  margin-bottom: 8px;
 }
 
 .error__message {
@@ -185,6 +177,15 @@
 
 .error__retry:hover {
   background: #8b4acb;
+}
+
+.empty {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 24px;
+  color: #ffffff;
+  text-align: center;
 }
 
 @media (max-width: 1366px) {

@@ -1,0 +1,69 @@
+/* app/favorites/favorites.module.css */
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.messageContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 30px;
+}
+
+.emptyMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  max-width: 500px;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  border-radius: 14px;
+  animation: fadeIn 0.5s ease;
+}
+
+.emptyMessage p {
+  font-size: 18px;
+  color: #ffffff;
+  margin-bottom: 8px;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+.emptyHint {
+  font-size: 14px !important;
+  opacity: 0.6 !important;
+  margin-bottom: 24px !important;
+}
+
+.emptyLink {
+  display: inline-block;
+  padding: 12px 28px;
+  background: linear-gradient(135deg, #580ea2 0%, #7b2cbf 100%);
+  color: white;
+  text-decoration: none;
+  border-radius: 50px;
+  font-weight: 500;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.emptyLink:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(88, 14, 162, 0.4);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
