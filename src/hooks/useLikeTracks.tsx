@@ -1,3 +1,4 @@
+// hooks/useLikeTracks.tsx
 import { addLike, removeLike } from '@/app/services/tracks/tracksApi';
 import { TrackType } from '@/app/sharedTypes/sharedTypes';
 import {
@@ -7,7 +8,7 @@ import {
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { withReauth } from '@/app/utils/withReAuth';
 import { AxiosError } from 'axios';
-import { useState, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 
 type returnTypeHook = {
   isLoading: boolean;
@@ -21,10 +22,9 @@ export const useLikeTrack = (track: TrackType | null): returnTypeHook => {
   const { access, refresh } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
-  const isLike = useMemo(() => {
-    if (!track) return false;
-    return favoriteTracks.some((t) => t._id === track._id);
-  }, [favoriteTracks, track]);
+  const isLike = track
+    ? favoriteTracks.some((t) => t._id === track._id)
+    : false;
 
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);

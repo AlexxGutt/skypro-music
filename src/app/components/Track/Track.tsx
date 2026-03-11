@@ -1,3 +1,4 @@
+// components/Track/Track.tsx
 'use client';
 import styles from './track.module.css';
 import Link from 'next/link';
@@ -20,8 +21,8 @@ export default function TrackItem({ track, tracks }: TrackItemProps) {
   const dispatch = useAppDispatch();
   const currentTrack = useAppSelector((state) => state.tracks.currentTrack);
   const isPlay = useAppSelector((state) => state.tracks.isPlay);
+
   const { toggleLike, isLike } = useLikeTrack(track);
-  const { access } = useAppSelector((state) => state.auth);
 
   const onClickTrack = () => {
     dispatch(setCurrentTrack(track));
@@ -29,18 +30,12 @@ export default function TrackItem({ track, tracks }: TrackItemProps) {
     dispatch(setPlayList(tracks));
   };
 
+  const isCurrentTrack = currentTrack?._id === track._id;
+
   const handleLikeClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!access) {
-      alert('Войдите в аккаунт, чтобы добавлять треки в избранное');
-      return;
-    }
-    if (!currentTrack) return;
-
     toggleLike();
   };
-
-  const isCurrentTrack = currentTrack?._id === track._id;
 
   return (
     <div className={styles.playlist__track} onClick={onClickTrack}>
