@@ -7,20 +7,18 @@
   -ms-flex-direction: column;
   flex-direction: column;
   overflow-y: auto;
-  max-height: calc(100vh - 350px); /* Регулируйте это значение под ваш макет */
-  padding-bottom: 120px; /* Добавляем отступ снизу, чтобы треки не скрывались под прогресс баром */
-  box-sizing: border-box; /* Учитываем padding в расчете высоты */
+  max-height: calc(100vh - 350px);
+  padding-bottom: 120px;
+  box-sizing: border-box;
 }
 
-/* Убираем стилизацию скроллбара для Chrome, Safari и Opera */
 .content__playlist::-webkit-scrollbar {
-  width: 0; /* Скрываем скроллбар */
-  background: transparent; /* Делаем прозрачным */
+  width: 0;
+  background: transparent;
 }
 
-/* Для Firefox */
 .content__playlist {
-  scrollbar-width: none; /* Скрываем скроллбар в Firefox */
+  scrollbar-width: none;
 }
 
 .playlist__item {
@@ -132,12 +130,23 @@
   color: #696969;
 }
 
+.track__time {
+  display: flex;
+  align-items: center;
+  cursor: default;
+}
+
 .track__timeSvg {
   width: 14px;
   height: 12px;
   margin-right: 17px;
   fill: transparent;
   stroke: #696969;
+  cursor: pointer;
+}
+
+.track__timeSvg:hover {
+  stroke: #ffffff;
 }
 
 .track__timeText {
@@ -147,6 +156,7 @@
   line-height: 24px;
   text-align: right;
   color: #696969;
+  cursor: default;
 }
 
 .track__pulsingDot {
@@ -163,9 +173,71 @@
   background-color: #ad61ff;
 }
 
-/* Добавляем отступ для последнего элемента, чтобы гарантировать пространство */
 .playlist__item:last-child {
-  margin-bottom: 120px; /* Дополнительный отступ для последнего трека */
+  margin-bottom: 120px;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+}
+
+.track__timeSvg {
+  width: 14px;
+  height: 12px;
+  margin-right: 17px;
+  fill: transparent;
+  stroke: #696969;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.track__timeSvg:hover {
+  stroke: #ffffff;
+}
+
+.track__timeSvgLiked {
+  fill: #ad61ff;
+  stroke: #ad61ff;
+}
+
+.track__timeSvgLiked:hover {
+  fill: #c08aff;
+  stroke: #c08aff;
+}
+
+.track__timeText {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: right;
+  color: #696969;
+  cursor: default;
+}
+
+.track__pulsingDot {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #ad61ff;
+  animation: pulse 2s infinite;
+}
+
+.track__pulsingDot.static {
+  animation: none;
+  background-color: #ad61ff;
 }
 
 @keyframes pulse {

@@ -12,25 +12,16 @@ export interface SignInResponse {
   username: string;
 }
 
-export async function signIn(credentials: SignInData) {
+export async function signIn(data: SignInData) {
   try {
     const userResponse = await axios.post<SignInResponse>(
       `${BASE_URL}/user/login/`,
-      credentials,
+      data,
     );
-
-    const tokenResponse = await axios.post<{ access: string; refresh: string }>(
-      `${BASE_URL}/user/token/`,
-      credentials,
-    );
-
-    localStorage.setItem('accessToken', tokenResponse.data.access);
-    localStorage.setItem('refreshToken', tokenResponse.data.refresh);
 
     return {
       success: true,
       user: userResponse.data,
-      tokens: tokenResponse.data,
     };
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
@@ -46,3 +37,23 @@ export async function signIn(credentials: SignInData) {
     };
   }
 }
+
+type accessTokenType = {
+  access: string;
+};
+
+type refreshTokenType = {
+  refresh: string;
+};
+
+type tokensType = accessTokenType & refreshTokenType;
+
+export const getTokens = (data: SignInData): Promise<tokensType> => {
+  return axios.post(BASE_URL + '/user/token/', data).then((res) => res.data);
+};
+
+export const refreshToken = (refresh: string): Promise<accessTokenType> => {
+  return axios
+    .post(BASE_URL + '/user/token/refresh/', { refresh })
+    .then((res) => res.data);
+};

@@ -3,9 +3,10 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Centerblock from '@/app/components/Centerblock/Centerblock';
-import { getCategoryTracks, getTracks } from '@/app/services/tracks/tracksApi';
+import { getCategoryTracks } from '@/app/services/tracks/tracksApi';
 import { TrackType } from '@/app/sharedTypes/sharedTypes';
 import { AxiosError } from 'axios';
+import { useAppSelector } from '@/app/store/store';
 
 const categoryTitles: Record<string, string> = {
   '2': 'Плейлист дня',
@@ -16,6 +17,7 @@ const categoryTitles: Record<string, string> = {
 export default function CategoryPage() {
   const params = useParams<{ id: string }>();
   const id = params.id;
+  const { allTracks, fetchIsLoading } = useAppSelector((state) => state.tracks);
 
   const [tracks, setTracks] = useState<TrackType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -23,35 +25,34 @@ export default function CategoryPage() {
 
   useEffect(() => {
     setIsLoading(true);
-    setError(null);
-
-    Promise.all([getTracks(), getCategoryTracks(id)])
-      .then(([allTracks, categoryTrackIds]) => {
-        const filteredTracks = allTracks.filter((track) =>
-          categoryTrackIds.includes(track._id),
-        );
-
-        setTracks(filteredTracks);
-      })
-      .catch((error) => {
-        if (error instanceof AxiosError) {
-          if (error.response) {
-            setError(
-              error.response.data?.message || 'Ошибка при загрузке подборки',
-            );
-          } else if (error.request) {
-            setError('Что-то с интернетом');
+    if (!fetchIsLoading) {
+      getCategoryTracks(id)
+        .then((categoryTrackIds) => {
+          const filteredTracks = allTracks.filter((track) =>
+            categoryTrackIds.includes(track._id),
+          );
+          setTracks(filteredTracks);
+        })
+        .catch((error) => {
+          if (error instanceof AxiosError) {
+            if (error.response) {
+              setError(
+                error.response.data?.message || 'Ошибка при загрузке подборки',
+              );
+            } else if (error.request) {
+              setError('Что-то с интернетом');
+            } else {
+              setError('Неизвестная ошибка');
+            }
           } else {
-            setError('Неизвестная ошибка');
+            setError('Произошла ошибка при загрузке');
           }
-        } else {
-          setError('Произошла ошибка при загрузке');
-        }
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, [id]);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
+  }, [fetchIsLoading]);
 
   return (
     <Centerblock
