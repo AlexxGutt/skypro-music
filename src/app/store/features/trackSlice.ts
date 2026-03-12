@@ -12,6 +12,12 @@ type initialStateType = {
   allTracks: TrackType[];
   fetchError: null | string;
   fetchIsLoading: boolean;
+  filteredTracks: TrackType[];
+  filters: {
+    authors: string[];
+    genres: string[];
+    years: string;
+  };
 };
 
 const initialState: initialStateType = {
@@ -25,6 +31,12 @@ const initialState: initialStateType = {
   allTracks: [],
   fetchError: null,
   fetchIsLoading: true,
+  filteredTracks: [],
+  filters: {
+    authors: [],
+    genres: [],
+    years: 'По умолчанию',
+  },
 };
 
 const trackSlice = createSlice({
@@ -122,6 +134,16 @@ const trackSlice = createSlice({
     setFetchIsLoading: (state, action: PayloadAction<boolean>) => {
       state.fetchIsLoading = action.payload;
     },
+    setFilterAuthors: (state, action: PayloadAction<string>) => {
+      const author = action.payload;
+      if (state.filters.authors.includes(author)) {
+        state.filters.authors = state.filters.authors.filter((el) => {
+          return el !== author;
+        });
+      } else {
+        state.filters.authors = [...state.filters.authors, author];
+      }
+    },
   },
 });
 
@@ -138,5 +160,6 @@ export const {
   setFavoriteTracks,
   addLikedTracks,
   removeLikedTracks,
+  setFilterAuthors,
 } = trackSlice.actions;
 export const trackSliceReducer = trackSlice.reducer;

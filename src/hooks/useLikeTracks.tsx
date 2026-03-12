@@ -1,4 +1,3 @@
-// hooks/useLikeTracks.tsx
 import { addLike, removeLike } from '@/app/services/tracks/tracksApi';
 import { TrackType } from '@/app/sharedTypes/sharedTypes';
 import {
@@ -8,7 +7,7 @@ import {
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { withReauth } from '@/app/utils/withReAuth';
 import { AxiosError } from 'axios';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 type returnTypeHook = {
   isLoading: boolean;

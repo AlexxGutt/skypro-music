@@ -1,41 +1,37 @@
-'use client';
-
+import classNames from 'classnames';
 import styles from './filterItems.module.css';
 
-interface FilterItemProps {
-  label: string;
-  isOpen: boolean;
-  onToggle: () => void;
-  items?: string[];
-  onItemClick?: (item: string) => void;
-}
+type filterItemProps = {
+  activeFilter: null | string;
+  changeActiveFilter: (n: string) => void;
+  nameFilter: string;
+  list: string[];
+  titleFilter: string;
+};
 
-export default function FilterItem({
-  label,
-  isOpen,
-  onToggle,
-  items,
-  onItemClick,
-}: FilterItemProps) {
+export default function FilterItems({
+  activeFilter,
+  changeActiveFilter,
+  nameFilter,
+  list,
+  titleFilter,
+}: filterItemProps) {
+  const isOpen = activeFilter === nameFilter;
   return (
     <div className={styles.filter__wrapper}>
       <div
-        className={`${styles.filter__button} ${
-          isOpen ? styles.filter__button_active : ''
-        }`}
-        onClick={onToggle}
+        className={classNames(styles.filter__button, {
+          [styles.filter__button_active]: activeFilter === nameFilter,
+        })}
+        onClick={() => changeActiveFilter(nameFilter)}
       >
-        {label}
+        {titleFilter}
       </div>
-      {isOpen && items && items.length > 0 && (
+      {isOpen && (
         <div className={styles.filter__dropdown}>
-          {items.map((item) => (
-            <div
-              key={item}
-              className={styles.dropdown__item}
-              onClick={() => onItemClick?.(item)}
-            >
-              {item}
+          {list.map((el, index) => (
+            <div key={index} className={styles.dropdown__item}>
+              {el}
             </div>
           ))}
         </div>
