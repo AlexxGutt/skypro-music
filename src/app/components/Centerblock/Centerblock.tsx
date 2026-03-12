@@ -1,11 +1,14 @@
-// app/components/Centerblock/Centerblock.tsx
+'use client';
+
 import styles from './centerblock.module.css';
 import Search from '../Search/Search';
 import Track from '../Track/Track';
 import Filter from '../Filter/Filter';
 import classnames from 'classnames';
 import { TrackType } from '@/app/sharedTypes/sharedTypes';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
+import { useAppDispatch } from '@/app/store/store';
+import { setPagePlaylist } from '@/app/store/features/trackSlice';
 
 interface CenterblockProps {
   tracks: TrackType[];
@@ -13,6 +16,7 @@ interface CenterblockProps {
   error: string | null;
   title?: string;
   children?: ReactNode;
+  pagePlaylist: TrackType[];
 }
 
 export default function Centerblock({
@@ -21,12 +25,19 @@ export default function Centerblock({
   error,
   title = 'Треки',
   children,
+  pagePlaylist,
 }: CenterblockProps) {
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    if (!isLoading && !error) {
+      dispatch(setPagePlaylist(pagePlaylist));
+    }
+  }, [isLoading, error]);
   return (
     <div className={styles.centerblock}>
       <Search />
       <h2 className={styles.centerblock__h2}>{title}</h2>
-      <Filter tracks={tracks} />
+      <Filter tracks={pagePlaylist} />
       <div className={styles.centerblock__content}>
         <div className={styles.content__title}>
           <div className={classnames(styles.playlistTitle__col, styles.col01)}>

@@ -6,7 +6,10 @@ import { useState } from 'react';
 import styles from './filter.module.css';
 import FilterItems from '../FilterItem/FilterItems';
 import { useAppDispatch } from '@/app/store/store';
-import { setFilterAuthors } from '@/app/store/features/trackSlice';
+import {
+  setFilterAuthors,
+  setFilterGenres,
+} from '@/app/store/features/trackSlice';
 
 type filterProp = {
   tracks: TrackType[];
@@ -30,6 +33,10 @@ export default function Filter({ tracks }: filterProp) {
 
   const onSelectedAuthor = (author: string) => {
     dispatch(setFilterAuthors(author));
+  };
+
+  const onSelectedGenres = (genres: string) => {
+    dispatch(setFilterGenres(genres));
   };
 
   return (
@@ -58,7 +65,7 @@ export default function Filter({ tracks }: filterProp) {
         nameFilter={'genre'}
         list={uniqGenres}
         titleFilter={'жанру'}
-        onSelect={onSelectedAuthor}
+        onSelect={onSelectedGenres}
       />
     </div>
   );

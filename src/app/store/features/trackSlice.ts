@@ -1,7 +1,8 @@
 import { TrackType } from '@/app/sharedTypes/sharedTypes';
+import { applyFilters } from '@/app/utils/applyFilters';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-type initialStateType = {
+export type initialStateType = {
   currentTrack: TrackType | null;
   isPlay: boolean;
   isShuffle: boolean;
@@ -13,6 +14,7 @@ type initialStateType = {
   fetchError: null | string;
   fetchIsLoading: boolean;
   filteredTracks: TrackType[];
+  pagePlaylist: TrackType[];
   filters: {
     authors: string[];
     genres: string[];
@@ -32,6 +34,7 @@ const initialState: initialStateType = {
   fetchError: null,
   fetchIsLoading: true,
   filteredTracks: [],
+  pagePlaylist: [],
   filters: {
     authors: [],
     genres: [],
@@ -134,8 +137,12 @@ const trackSlice = createSlice({
     setFetchIsLoading: (state, action: PayloadAction<boolean>) => {
       state.fetchIsLoading = action.payload;
     },
+    setPagePlaylist: (state, action) => {
+      state.pagePlaylist = action.payload;
+    },
     setFilterAuthors: (state, action: PayloadAction<string>) => {
       const author = action.payload;
+
       if (state.filters.authors.includes(author)) {
         state.filters.authors = state.filters.authors.filter((el) => {
           return el !== author;
@@ -143,6 +150,21 @@ const trackSlice = createSlice({
       } else {
         state.filters.authors = [...state.filters.authors, author];
       }
+
+      state.filteredTracks = applyFilters(state);
+    },
+    setFilterGenres: (state, action: PayloadAction<string>) => {
+      const genres = action.payload;
+
+      if (state.filters.genres.includes(genres)) {
+        state.filters.genres = state.filters.genres.filter((el) => {
+          return el !== genres;
+        });
+      } else {
+        state.filters.genres = [...state.filters.genres, genres];
+      }
+
+      state.filteredTracks = applyFilters(state);
     },
   },
 });
@@ -161,5 +183,7 @@ export const {
   addLikedTracks,
   removeLikedTracks,
   setFilterAuthors,
+  setPagePlaylist,
+  setFilterGenres,
 } = trackSlice.actions;
 export const trackSliceReducer = trackSlice.reducer;
