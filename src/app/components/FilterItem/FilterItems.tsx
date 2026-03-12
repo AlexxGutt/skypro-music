@@ -7,6 +7,7 @@ type filterItemProps = {
   nameFilter: string;
   list: string[];
   titleFilter: string;
+  onSelect: (valur: string) => void;
 };
 
 export default function FilterItems({
@@ -15,6 +16,7 @@ export default function FilterItems({
   nameFilter,
   list,
   titleFilter,
+  onSelect,
 }: filterItemProps) {
   const isOpen = activeFilter === nameFilter;
   return (
@@ -30,7 +32,11 @@ export default function FilterItems({
       {isOpen && (
         <div className={styles.filter__dropdown}>
           {list.map((el, index) => (
-            <div key={index} className={styles.dropdown__item}>
+            <div
+              key={index}
+              onClick={() => onSelect(el)}
+              className={styles.dropdown__item}
+            >
               {el}
             </div>
           ))}

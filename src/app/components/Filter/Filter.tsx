@@ -5,6 +5,8 @@ import { getUniqueValues } from '@/app/utils/helper';
 import { useState } from 'react';
 import styles from './filter.module.css';
 import FilterItems from '../FilterItem/FilterItems';
+import { useAppDispatch } from '@/app/store/store';
+import { setFilterAuthors } from '@/app/store/features/trackSlice';
 
 type filterProp = {
   tracks: TrackType[];
@@ -12,6 +14,7 @@ type filterProp = {
 
 export default function Filter({ tracks }: filterProp) {
   const [activeFilter, setActiveFilter] = useState<null | string>(null);
+  const dispatch = useAppDispatch();
 
   const changeActiveFilter = (nameFilter: string) => {
     if (activeFilter === nameFilter) {
@@ -25,6 +28,10 @@ export default function Filter({ tracks }: filterProp) {
   const uniqGenres = getUniqueValues(tracks, 'genre');
   const years = ['Сначала новые', 'Сначала старые', 'По умолчанию'];
 
+  const onSelectedAuthor = (author: string) => {
+    dispatch(setFilterAuthors(author));
+  };
+
   return (
     <div className={styles.centerblock__filter}>
       <div className={styles.filter__title}>Искать по:</div>
@@ -35,6 +42,7 @@ export default function Filter({ tracks }: filterProp) {
         nameFilter={'author'}
         list={uniqAuthors}
         titleFilter={'исполнителю'}
+        onSelect={onSelectedAuthor}
       />
       <FilterItems
         activeFilter={activeFilter}
@@ -42,6 +50,7 @@ export default function Filter({ tracks }: filterProp) {
         nameFilter={'year'}
         list={years}
         titleFilter={'году выпуска'}
+        onSelect={onSelectedAuthor}
       />
       <FilterItems
         activeFilter={activeFilter}
@@ -49,6 +58,7 @@ export default function Filter({ tracks }: filterProp) {
         nameFilter={'genre'}
         list={uniqGenres}
         titleFilter={'жанру'}
+        onSelect={onSelectedAuthor}
       />
     </div>
   );
