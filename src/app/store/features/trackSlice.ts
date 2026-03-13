@@ -15,6 +15,7 @@ export type initialStateType = {
   fetchIsLoading: boolean;
   filteredTracks: TrackType[];
   pagePlaylist: TrackType[];
+  searchQuery: string;
   filters: {
     authors: string[];
     genres: string[];
@@ -35,6 +36,7 @@ const initialState: initialStateType = {
   fetchIsLoading: true,
   filteredTracks: [],
   pagePlaylist: [],
+  searchQuery: '',
   filters: {
     authors: [],
     genres: [],
@@ -139,6 +141,11 @@ const trackSlice = createSlice({
     },
     setPagePlaylist: (state, action) => {
       state.pagePlaylist = action.payload;
+      state.filteredTracks = applyFilters(state);
+    },
+    setSearchQuery: (state, action: PayloadAction<string>) => {
+      state.searchQuery = action.payload;
+      state.filteredTracks = applyFilters(state);
     },
     setFilterAuthors: (state, action: PayloadAction<string>) => {
       const author = action.payload;
@@ -166,6 +173,19 @@ const trackSlice = createSlice({
 
       state.filteredTracks = applyFilters(state);
     },
+    setFilterYears: (state, action: PayloadAction<string>) => {
+      state.filters.years = action.payload;
+      state.filteredTracks = applyFilters(state);
+    },
+    setResetFilters: (state) => {
+      state.filters = {
+        authors: [],
+        genres: [],
+        years: 'По умолчанию',
+      };
+      state.searchQuery = '';
+      state.filteredTracks = applyFilters(state);
+    },
   },
 });
 
@@ -185,5 +205,8 @@ export const {
   setFilterAuthors,
   setPagePlaylist,
   setFilterGenres,
+  setFilterYears,
+  setSearchQuery,
+  setResetFilters,
 } = trackSlice.actions;
 export const trackSliceReducer = trackSlice.reducer;

@@ -6,7 +6,7 @@ import Track from '../Track/Track';
 import Filter from '../Filter/Filter';
 import classnames from 'classnames';
 import { TrackType } from '@/app/sharedTypes/sharedTypes';
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect, useRef } from 'react';
 import { useAppDispatch } from '@/app/store/store';
 import { setPagePlaylist } from '@/app/store/features/trackSlice';
 
@@ -16,7 +16,7 @@ interface CenterblockProps {
   error: string | null;
   title?: string;
   children?: ReactNode;
-  pagePlaylist: TrackType[];
+  pagePlaylist?: TrackType[];
 }
 
 export default function Centerblock({
@@ -25,14 +25,23 @@ export default function Centerblock({
   error,
   title = 'Треки',
   children,
-  pagePlaylist,
+  pagePlaylist = [],
 }: CenterblockProps) {
   const dispatch = useAppDispatch();
+  const initialized = useRef(false);
+
   useEffect(() => {
-    if (!isLoading && !error) {
+    if (
+      !isLoading &&
+      !error &&
+      pagePlaylist.length > 0 &&
+      !initialized.current
+    ) {
+      initialized.current = true;
       dispatch(setPagePlaylist(pagePlaylist));
     }
-  }, [isLoading, error]);
+  }, [isLoading, error, pagePlaylist, dispatch]);
+
   return (
     <div className={styles.centerblock}>
       <Search />

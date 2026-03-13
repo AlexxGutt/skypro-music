@@ -2,17 +2,44 @@ import { TrackType } from '../sharedTypes/sharedTypes';
 import { initialStateType } from '../store/features/trackSlice';
 
 export const applyFilters = (state: initialStateType): TrackType[] => {
-  let filteredPlaylist = state.pagePlaylist;
+  if (!state.pagePlaylist || state.pagePlaylist.length === 0) {
+    return [];
+  }
 
-  if (state.filters.authors.length) {
-    filteredPlaylist = filteredPlaylist.filter((track) => {
-      return state.filters.authors.includes(track.author);
-    });
+  let filteredPlaylist = [...state.pagePlaylist];
+
+  if (state.searchQuery?.trim()) {
+    const query = state.searchQuery.toLowerCase().trim();
+    filteredPlaylist = filteredPlaylist.filter(
+      (track) =>
+        track.name.toLowerCase().includes(query) ||
+        track.author.toLowerCase().includes(query),
+    );
   }
-  if (state.filters.genres.length) {
-    filteredPlaylist = filteredPlaylist.filter((track) => {
-      return state.filters.genres.some((el) => track.genre.includes(el));
-    });
+
+  if (state.filters.authors.length > 0) {
+    filteredPlaylist = filteredPlaylist.filter((track) =>
+      state.filters.authors.includes(track.author),
+    );
   }
+
+  if (state.filters.genres.length > 0) {
+    filteredPlaylist = filteredPlaylist.filter((track) =>
+      state.filters.genres.some((genre) => track.genre.includes(genre)),
+    );
+  }
+
+  if (state.filters.years === 'Сначала новые') {
+    filteredPlaylist = [...filteredPlaylist].sort(
+      (a, b) =>
+        new Date(b.release_date).getTime() - new Date(a.release_date).getTime(),
+    );
+  } else if (state.filters.years === 'Сначала старые') {
+    filteredPlaylist = [...filteredPlaylist].sort(
+      (a, b) =>
+        new Date(a.release_date).getTime() - new Date(b.release_date).getTime(),
+    );
+  }
+
   return filteredPlaylist;
 };

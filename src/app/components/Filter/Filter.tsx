@@ -9,6 +9,7 @@ import { useAppDispatch } from '@/app/store/store';
 import {
   setFilterAuthors,
   setFilterGenres,
+  setFilterYears,
 } from '@/app/store/features/trackSlice';
 
 type filterProp = {
@@ -39,6 +40,10 @@ export default function Filter({ tracks }: filterProp) {
     dispatch(setFilterGenres(genres));
   };
 
+  const onSelectedYears = (years: string) => {
+    dispatch(setFilterYears(years));
+  };
+
   return (
     <div className={styles.centerblock__filter}>
       <div className={styles.filter__title}>Искать по:</div>
@@ -57,7 +62,7 @@ export default function Filter({ tracks }: filterProp) {
         nameFilter={'year'}
         list={years}
         titleFilter={'году выпуска'}
-        onSelect={onSelectedAuthor}
+        onSelect={onSelectedYears}
       />
       <FilterItems
         activeFilter={activeFilter}
