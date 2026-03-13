@@ -39,7 +39,6 @@ export default function CategoryPage() {
           );
           setCategoryTracks(filtered);
 
-          // Устанавливаем pagePlaylist для фильтров
           dispatch(setPagePlaylist(filtered));
         })
         .catch((error) => {
@@ -65,8 +64,8 @@ export default function CategoryPage() {
 
   return (
     <Centerblock
-      tracks={filteredTracks} // Используем отфильтрованные треки из Redux
-      pagePlaylist={categoryTracks} // Передаем треки категории для фильтров
+      tracks={filteredTracks}
+      pagePlaylist={categoryTracks}
       isLoading={isLoading}
       error={error}
       title={categoryTitles[id] || 'Подборка'}

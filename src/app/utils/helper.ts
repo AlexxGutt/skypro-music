@@ -1,4 +1,5 @@
 import { TrackType } from '../sharedTypes/sharedTypes';
+
 export function formatTime(time: number) {
   const minutes = Math.floor(time / 60);
   const inputSecond = Math.floor(time % 60);
