@@ -3,7 +3,7 @@
 import { useAppSelector } from '@/app/store/store';
 import styles from './page.module.css';
 import Centerblock from '@/app/components/Centerblock/Centerblock';
-import { useFetchFavorites } from '@/hooks/useFetchFavorites';
+import { useFetchFavorites } from '@/app/hooks/useFetchFavorites';
 
 export default function FavoritesPage() {
   const { favoriteTracks, filteredTracks, fetchIsLoading, fetchError } =

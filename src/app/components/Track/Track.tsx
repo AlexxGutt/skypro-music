@@ -1,4 +1,3 @@
-// components/Track/Track.tsx
 'use client';
 import styles from './track.module.css';
 import Link from 'next/link';
@@ -10,7 +9,7 @@ import {
   setPlayList,
 } from '@/app/store/features/trackSlice';
 import { TrackType } from '@/app/sharedTypes/sharedTypes';
-import { useLikeTrack } from '@/hooks/useLikeTracks';
+import { useLikeTrack } from '@/app/hooks/useLikeTracks';
 
 interface TrackItemProps {
   track: TrackType;
@@ -73,9 +72,7 @@ export default function TrackItem({ track, tracks }: TrackItemProps) {
           className={`${styles.track__timeSvg} ${isLike ? styles.track__timeSvgLiked : ''}`}
           onClick={handleLikeClick}
         >
-          <use
-            xlinkHref={`/img/icon/sprite.svg#${isLike ? 'icon-like' : 'icon-dislike'}`}
-          ></use>
+          <use xlinkHref="/img/icon/sprite.svg#icon-like"></use>
         </svg>
         <span className={styles.track__timeText}>
           {formatTime(track.duration_in_seconds)}

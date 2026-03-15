@@ -34,15 +34,32 @@ export default function FilterItems({
     return false;
   };
 
+  const getSelectedCount = () => {
+    if (nameFilter === 'author') {
+      return filters.authors.length;
+    } else if (nameFilter === 'genre') {
+      return filters.genres.length;
+    } else if (nameFilter === 'year') {
+      return filters.years !== 'По умолчанию' ? 1 : 0;
+    }
+    return 0;
+  };
+
+  const selectedCount = getSelectedCount();
+
   return (
     <div className={styles.filter__wrapper}>
       <div
         className={classNames(styles.filter__button, {
           [styles.filter__button_active]: isOpen,
+          [styles.filter__button_withBadge]: selectedCount > 0,
         })}
         onClick={() => changeActiveFilter(nameFilter)}
       >
         {titleFilter}
+        {selectedCount > 0 && (
+          <span className={styles.filter__badge}>{selectedCount}</span>
+        )}
       </div>
 
       {isOpen && (

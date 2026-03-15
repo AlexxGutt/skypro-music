@@ -12,7 +12,7 @@ import {
 } from '@/app/store/features/trackSlice';
 import { formatTime } from '@/app/utils/helper';
 import ProgressBar from '../ProgressBar/ProgressBar';
-import { useLikeTrack } from '@/hooks/useLikeTracks';
+import { useLikeTrack } from '@/app/hooks/useLikeTracks';
 
 export default function Bar() {
   const currentTrack = useAppSelector((state) => state.tracks.currentTrack);
@@ -263,6 +263,7 @@ export default function Bar() {
                   </Link>
                 </div>
               </div>
+
               <div className={styles.trackPlay__likeContainer}>
                 <div
                   onClick={handleLikeClick}
@@ -277,11 +278,8 @@ export default function Bar() {
                       styles.trackPlay__likeSvg,
                       isLike && styles.trackPlay__likeSvgLiked,
                     )}
-                    key={isLike ? 'liked' : 'unliked'}
                   >
-                    <use
-                      xlinkHref={`/img/icon/sprite.svg#${isLike ? 'icon-like' : 'icon-dislike'}`}
-                    />
+                    <use xlinkHref="/img/icon/sprite.svg#icon-like" />
                   </svg>
                 </div>
               </div>

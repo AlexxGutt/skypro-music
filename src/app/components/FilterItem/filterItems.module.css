@@ -14,6 +14,7 @@
   gap: 8px;
   white-space: nowrap;
   margin-right: 10px;
+  position: relative;
 }
 
 .filter__button:hover {
@@ -29,6 +30,43 @@
 .filter__button_active:hover {
   background-color: #ccb5b5;
   color: #000000;
+}
+
+.filter__badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: #ad61ff;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  border: 2px solid #181818;
+  z-index: 10;
+  animation: badgeAppear 0.2s ease;
+}
+
+@keyframes badgeAppear {
+  from {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.filter__button_active .filter__badge {
+  background-color: #8b4acb;
+  border-color: #504e4e;
 }
 
 .filter__wrapper {
@@ -104,23 +142,4 @@
 
 .filter__dropdown::-webkit-scrollbar-thumb:hover {
   background: #c08aff;
-}
-
-.filter__badge {
-  background-color: #ad61ff;
-  color: white;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  margin-left: 8px;
-}
-
-.filter__divider {
-  height: 1px;
-  background-color: #3b3b3b;
-  margin: 8px 0;
 }
