@@ -11,16 +11,23 @@ import {
   setFilterGenres,
   setFilterYears,
 } from '@/app/store/features/trackSlice';
+import {
+  SORT_OPTIONS,
+  FILTER_NAMES,
+  FILTER_TITLES,
+  FilterName,
+  SortOption,
+} from '@/app/constants/constants';
 
 type filterProp = {
   tracks: TrackType[];
 };
 
 const Filter = memo(({ tracks }: filterProp) => {
-  const [activeFilter, setActiveFilter] = useState<null | string>(null);
+  const [activeFilter, setActiveFilter] = useState<FilterName | null>(null); // 👈 используем тип
   const dispatch = useAppDispatch();
 
-  const changeActiveFilter = useCallback((nameFilter: string) => {
+  const changeActiveFilter = useCallback((nameFilter: FilterName) => {
     setActiveFilter((prev) => (prev === nameFilter ? null : nameFilter));
   }, []);
 
@@ -40,7 +47,7 @@ const Filter = memo(({ tracks }: filterProp) => {
 
   const onSelectedYears = useCallback(
     (year: string) => {
-      dispatch(setFilterYears(year));
+      dispatch(setFilterYears(year as SortOption));
     },
     [dispatch],
   );
@@ -50,10 +57,7 @@ const Filter = memo(({ tracks }: filterProp) => {
     [tracks],
   );
   const uniqGenres = useMemo(() => getUniqueValues(tracks, 'genre'), [tracks]);
-  const years = useMemo(
-    () => ['Сначала новые', 'Сначала старые', 'По умолчанию'],
-    [],
-  );
+  const years = useMemo(() => Object.values(SORT_OPTIONS), []);
 
   return (
     <div className={styles.centerblock__filter}>
@@ -62,25 +66,25 @@ const Filter = memo(({ tracks }: filterProp) => {
       <FilterItems
         activeFilter={activeFilter}
         changeActiveFilter={changeActiveFilter}
-        nameFilter={'author'}
+        nameFilter={FILTER_NAMES.AUTHOR}
         list={uniqAuthors}
-        titleFilter={'исполнителю'}
+        titleFilter={FILTER_TITLES[FILTER_NAMES.AUTHOR]}
         onSelect={onSelectedAuthor}
       />
       <FilterItems
         activeFilter={activeFilter}
         changeActiveFilter={changeActiveFilter}
-        nameFilter={'year'}
+        nameFilter={FILTER_NAMES.YEAR}
         list={years}
-        titleFilter={'году выпуска'}
+        titleFilter={FILTER_TITLES[FILTER_NAMES.YEAR]}
         onSelect={onSelectedYears}
       />
       <FilterItems
         activeFilter={activeFilter}
         changeActiveFilter={changeActiveFilter}
-        nameFilter={'genre'}
+        nameFilter={FILTER_NAMES.GENRE}
         list={uniqGenres}
-        titleFilter={'жанру'}
+        titleFilter={FILTER_TITLES[FILTER_NAMES.GENRE]}
         onSelect={onSelectedGenres}
       />
     </div>

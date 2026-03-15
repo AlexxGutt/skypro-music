@@ -1,11 +1,12 @@
 import classNames from 'classnames';
 import styles from './filterItems.module.css';
 import { useAppSelector } from '@/app/store/store';
+import { FilterName } from '@/app/constants/constants';
 
 type filterItemProps = {
   activeFilter: null | string;
-  changeActiveFilter: (n: string) => void;
-  nameFilter: string;
+  changeActiveFilter: (nameFilter: FilterName) => void;
+  nameFilter: FilterName;
   list: string[];
   titleFilter: string;
   onSelect: (value: string) => void;

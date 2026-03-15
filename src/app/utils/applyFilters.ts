@@ -1,3 +1,4 @@
+import { SORT_OPTIONS } from '../constants/constants';
 import { TrackType } from '../sharedTypes/sharedTypes';
 import { initialStateType } from '../store/features/trackSlice';
 
@@ -29,12 +30,12 @@ export const applyFilters = (state: initialStateType): TrackType[] => {
     );
   }
 
-  if (state.filters.years === 'Сначала новые') {
+  if (state.filters.years === SORT_OPTIONS.NEW) {
     filteredPlaylist = [...filteredPlaylist].sort(
       (a, b) =>
         new Date(b.release_date).getTime() - new Date(a.release_date).getTime(),
     );
-  } else if (state.filters.years === 'Сначала старые') {
+  } else if (state.filters.years === SORT_OPTIONS.OLD) {
     filteredPlaylist = [...filteredPlaylist].sort(
       (a, b) =>
         new Date(a.release_date).getTime() - new Date(b.release_date).getTime(),

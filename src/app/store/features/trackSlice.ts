@@ -1,3 +1,4 @@
+import { SORT_OPTIONS, SortOption } from '@/app/constants/constants';
 import { TrackType } from '@/app/sharedTypes/sharedTypes';
 import { applyFilters } from '@/app/utils/applyFilters';
 import { toggleFilterInArray } from '@/app/utils/toggleFilter';
@@ -21,7 +22,7 @@ export type initialStateType = {
   filters: {
     authors: string[];
     genres: string[];
-    years: string;
+    years: SortOption;
   };
 };
 
@@ -42,7 +43,7 @@ const initialState: initialStateType = {
   filters: {
     authors: [],
     genres: [],
-    years: 'По умолчанию',
+    years: SORT_OPTIONS.DEFAULT,
   },
 };
 
@@ -138,7 +139,7 @@ const trackSlice = createSlice({
       state.filters.genres = toggleFilterInArray(state.filters.genres, genre);
       state.filteredTracks = applyFilters(state);
     },
-    setFilterYears: (state, action: PayloadAction<string>) => {
+    setFilterYears: (state, action: PayloadAction<SortOption>) => {
       state.filters.years = action.payload;
       state.filteredTracks = applyFilters(state);
     },

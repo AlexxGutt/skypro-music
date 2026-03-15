@@ -8,12 +8,7 @@ import { TrackType } from '@/app/sharedTypes/sharedTypes';
 import { AxiosError } from 'axios';
 import { useAppSelector, useAppDispatch } from '@/app/store/store';
 import { setPagePlaylist } from '@/app/store/features/trackSlice';
-
-const categoryTitles: Record<string, string> = {
-  '2': 'Плейлист дня',
-  '3': '100 танцевальных хитов',
-  '4': 'Инди-заряд',
-};
+import { CATEGORY_TITLES } from '@/app/constants/constants';
 
 export default function CategoryPage() {
   const params = useParams<{ id: string }>();
@@ -68,7 +63,7 @@ export default function CategoryPage() {
       pagePlaylist={categoryTracks}
       isLoading={isLoading}
       error={error}
-      title={categoryTitles[id] || 'Подборка'}
+      title={CATEGORY_TITLES[id] || 'Подборка'}
     />
   );
 }

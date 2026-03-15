@@ -34,7 +34,6 @@ export default function Nav() {
     <nav className={styles.main__nav}>
       <Link href="/">
         <div className={styles.nav__logo}>
-          {/*TODO: img –> Image*/}
           <Image
             width={250}
             height={170}
@@ -55,7 +54,6 @@ export default function Nav() {
       >
         <ul className={styles.menu__list}>
           <li className={styles.menu__item}>
-            {/*TODO: a -> Link*/}
             <Link href="/" className={styles.menu__link}>
               Главное
             </Link>
