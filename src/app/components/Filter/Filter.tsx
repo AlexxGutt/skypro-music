@@ -2,7 +2,7 @@
 
 import { TrackType } from '@/app/sharedTypes/sharedTypes';
 import { getUniqueValues } from '@/app/utils/helper';
-import { useState } from 'react';
+import { useState, useCallback, memo, useMemo } from 'react';
 import styles from './filter.module.css';
 import FilterItems from '../FilterItem/FilterItems';
 import { useAppDispatch } from '@/app/store/store';
@@ -16,33 +16,44 @@ type filterProp = {
   tracks: TrackType[];
 };
 
-export default function Filter({ tracks }: filterProp) {
+const Filter = memo(({ tracks }: filterProp) => {
   const [activeFilter, setActiveFilter] = useState<null | string>(null);
   const dispatch = useAppDispatch();
 
-  const changeActiveFilter = (nameFilter: string) => {
-    if (activeFilter === nameFilter) {
-      setActiveFilter(null);
-    } else {
-      setActiveFilter(nameFilter);
-    }
-  };
+  const changeActiveFilter = useCallback((nameFilter: string) => {
+    setActiveFilter((prev) => (prev === nameFilter ? null : nameFilter));
+  }, []);
 
-  const uniqAuthors = getUniqueValues(tracks, 'author');
-  const uniqGenres = getUniqueValues(tracks, 'genre');
-  const years = ['Сначала новые', 'Сначала старые', 'По умолчанию'];
+  const onSelectedAuthor = useCallback(
+    (author: string) => {
+      dispatch(setFilterAuthors(author));
+    },
+    [dispatch],
+  );
 
-  const onSelectedAuthor = (author: string) => {
-    dispatch(setFilterAuthors(author));
-  };
+  const onSelectedGenres = useCallback(
+    (genre: string) => {
+      dispatch(setFilterGenres(genre));
+    },
+    [dispatch],
+  );
 
-  const onSelectedGenres = (genres: string) => {
-    dispatch(setFilterGenres(genres));
-  };
+  const onSelectedYears = useCallback(
+    (year: string) => {
+      dispatch(setFilterYears(year));
+    },
+    [dispatch],
+  );
 
-  const onSelectedYears = (years: string) => {
-    dispatch(setFilterYears(years));
-  };
+  const uniqAuthors = useMemo(
+    () => getUniqueValues(tracks, 'author'),
+    [tracks],
+  );
+  const uniqGenres = useMemo(() => getUniqueValues(tracks, 'genre'), [tracks]);
+  const years = useMemo(
+    () => ['Сначала новые', 'Сначала старые', 'По умолчанию'],
+    [],
+  );
 
   return (
     <div className={styles.centerblock__filter}>
@@ -74,4 +85,7 @@ export default function Filter({ tracks }: filterProp) {
       />
     </div>
   );
-}
+});
+
+Filter.displayName = 'Filter';
+export default Filter;

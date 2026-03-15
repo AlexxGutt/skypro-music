@@ -10,31 +10,35 @@ import {
 } from '@/app/store/features/trackSlice';
 import { TrackType } from '@/app/sharedTypes/sharedTypes';
 import { useLikeTrack } from '@/app/hooks/useLikeTracks';
+import { useCallback, memo } from 'react';
 
 interface TrackItemProps {
   track: TrackType;
   tracks: TrackType[];
 }
 
-export default function TrackItem({ track, tracks }: TrackItemProps) {
+const TrackItem = memo(({ track, tracks }: TrackItemProps) => {
   const dispatch = useAppDispatch();
   const currentTrack = useAppSelector((state) => state.tracks.currentTrack);
   const isPlay = useAppSelector((state) => state.tracks.isPlay);
 
   const { toggleLike, isLike } = useLikeTrack(track);
 
-  const onClickTrack = () => {
+  const onClickTrack = useCallback(() => {
     dispatch(setCurrentTrack(track));
     dispatch(setIsPlay(true));
     dispatch(setPlayList(tracks));
-  };
+  }, [dispatch, track, tracks]);
+
+  const handleLikeClick = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      toggleLike();
+    },
+    [toggleLike],
+  );
 
   const isCurrentTrack = currentTrack?._id === track._id;
-
-  const handleLikeClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    toggleLike();
-  };
 
   return (
     <div className={styles.playlist__track} onClick={onClickTrack}>
@@ -80,4 +84,8 @@ export default function TrackItem({ track, tracks }: TrackItemProps) {
       </div>
     </div>
   );
-}
+});
+
+TrackItem.displayName = 'TrackItem';
+
+export default TrackItem;
