@@ -13,6 +13,7 @@ import {
 import { formatTime } from '@/app/utils/helper';
 import ProgressBar from '../ProgressBar/ProgressBar';
 import { useLikeTrack } from '@/app/hooks/useLikeTracks';
+import Notification from '../Notification/Notification';
 
 export default function Bar() {
   const currentTrack = useAppSelector((state) => state.tracks.currentTrack);
@@ -25,6 +26,7 @@ export default function Bar() {
   const [volume, setVolume] = useState(0.5);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [showAuthMessage, setShowAuthMessage] = useState(false);
 
   const dispatch = useAppDispatch();
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -56,6 +58,15 @@ export default function Bar() {
       setIsChangingTrack(false);
     }, 100);
   }, [currentTrack, dispatch]);
+
+  useEffect(() => {
+    if (showAuthMessage) {
+      const timer = setTimeout(() => {
+        setShowAuthMessage(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showAuthMessage]);
 
   const onToggleLoop = () => {
     setIsLoop(!isLoop);
@@ -151,7 +162,7 @@ export default function Bar() {
   const handleLikeClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!access) {
-      alert('Войдите в аккаунт, чтобы добавлять треки в избранное');
+      setShowAuthMessage(true);
       return;
     }
     if (!currentTrack) return;
@@ -331,6 +342,15 @@ export default function Bar() {
           </div>
         </div>
       </div>
+
+      {showAuthMessage && (
+        <Notification
+          message="Войдите в аккаунт, чтобы добавлять треки в избранное"
+          linkText="Войти"
+          linkHref="/auth/signin"
+          onClose={() => setShowAuthMessage(false)}
+        />
+      )}
     </div>
   );
 }
