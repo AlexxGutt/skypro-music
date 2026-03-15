@@ -124,14 +124,26 @@ const trackSlice = createSlice({
     },
     setFavoriteTracks: (state, action: PayloadAction<TrackType[]>) => {
       state.favoriteTracks = action.payload;
+      if (window.location.pathname.includes('/music/favorite')) {
+        state.pagePlaylist = action.payload;
+        state.filteredTracks = applyFilters(state);
+      }
     },
     addLikedTracks: (state, action: PayloadAction<TrackType>) => {
       state.favoriteTracks = [...state.favoriteTracks, action.payload];
+      if (window.location.pathname.includes('/music/favorite')) {
+        state.pagePlaylist = state.favoriteTracks;
+        state.filteredTracks = applyFilters(state);
+      }
     },
     removeLikedTracks: (state, action: PayloadAction<TrackType>) => {
       state.favoriteTracks = state.favoriteTracks.filter(
         (track) => track._id !== action.payload._id,
       );
+      if (window.location.pathname.includes('/music/favorite')) {
+        state.pagePlaylist = state.favoriteTracks;
+        state.filteredTracks = applyFilters(state);
+      }
     },
     setFetchError: (state, action: PayloadAction<string>) => {
       state.fetchError = action.payload;
