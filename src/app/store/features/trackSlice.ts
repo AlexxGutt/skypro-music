@@ -1,5 +1,6 @@
 import { TrackType } from '@/app/sharedTypes/sharedTypes';
 import { applyFilters } from '@/app/utils/applyFilters';
+import { toggleFilterInArray } from '@/app/utils/toggleFilter';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export type initialStateType = {
@@ -153,28 +154,15 @@ const trackSlice = createSlice({
     },
     setFilterAuthors: (state, action: PayloadAction<string>) => {
       const author = action.payload;
-
-      if (state.filters.authors.includes(author)) {
-        state.filters.authors = state.filters.authors.filter((el) => {
-          return el !== author;
-        });
-      } else {
-        state.filters.authors = [...state.filters.authors, author];
-      }
-
+      state.filters.authors = toggleFilterInArray(
+        state.filters.authors,
+        author,
+      );
       state.filteredTracks = applyFilters(state);
     },
     setFilterGenres: (state, action: PayloadAction<string>) => {
-      const genres = action.payload;
-
-      if (state.filters.genres.includes(genres)) {
-        state.filters.genres = state.filters.genres.filter((el) => {
-          return el !== genres;
-        });
-      } else {
-        state.filters.genres = [...state.filters.genres, genres];
-      }
-
+      const genre = action.payload;
+      state.filters.genres = toggleFilterInArray(state.filters.genres, genre);
       state.filteredTracks = applyFilters(state);
     },
     setFilterYears: (state, action: PayloadAction<string>) => {
