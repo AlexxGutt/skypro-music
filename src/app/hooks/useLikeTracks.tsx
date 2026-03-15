@@ -3,11 +3,13 @@ import { TrackType } from '@/app/sharedTypes/sharedTypes';
 import {
   addLikedTracks,
   removeLikedTracks,
+  syncFavoritePage,
 } from '@/app/store/features/trackSlice';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { withReauth } from '@/app/utils/withReAuth';
 import { AxiosError } from 'axios';
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 type returnTypeHook = {
   isLoading: boolean;
@@ -20,6 +22,8 @@ export const useLikeTrack = (track: TrackType | null): returnTypeHook => {
   const { favoriteTracks } = useAppSelector((state) => state.tracks);
   const { access, refresh } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
+  const pathname = usePathname();
+  const isFavoritePage = pathname?.includes('/music/favorite');
 
   const isLike = track
     ? favoriteTracks.some((t) => t._id === track._id)
@@ -47,6 +51,9 @@ export const useLikeTrack = (track: TrackType | null): returnTypeHook => {
     )
       .then(() => {
         dispatch(actionSlice(track));
+        if (isFavoritePage) {
+          dispatch(syncFavoritePage());
+        }
       })
       .catch((error) => {
         if (error instanceof AxiosError) {
