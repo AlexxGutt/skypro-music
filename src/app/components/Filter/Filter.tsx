@@ -1,41 +1,47 @@
 'use client';
 
-import { getUniqueValues } from '@/app/utils/helper';
-import styles from './filter.module.css';
-import { useState } from 'react';
-import FilterItems from '../FilterItem/FilterItems';
 import { TrackType } from '@/app/sharedTypes/sharedTypes';
+import { getUniqueValues } from '@/app/utils/helper';
+import { useState } from 'react';
+import styles from './filter.module.css';
+import FilterItems from '../FilterItem/FilterItems';
+import { useAppDispatch } from '@/app/store/store';
+import {
+  setFilterAuthors,
+  setFilterGenres,
+  setFilterYears,
+} from '@/app/store/features/trackSlice';
 
-interface FilterProps {
+type filterProp = {
   tracks: TrackType[];
-}
+};
 
-export default function Filter({ tracks }: FilterProps) {
-  const [isArtistFilterOpen, setIsArtistFilterOpen] = useState(false);
-  const [isYearFilterOpen, setIsYearFilterOpen] = useState(false);
-  const [isGenreFilterOpen, setIsGenreFilterOpen] = useState(false);
+export default function Filter({ tracks }: filterProp) {
+  const [activeFilter, setActiveFilter] = useState<null | string>(null);
+  const dispatch = useAppDispatch();
 
-  const uniqueAuthors = getUniqueValues(tracks, 'author');
-  const uniqueGenre = getUniqueValues(tracks, 'genre');
-
-  const yearOptions = ['Сначала новые', 'Сначала старые', 'По умолчанию'];
-
-  const toggleArtistFilter = () => {
-    setIsArtistFilterOpen(!isArtistFilterOpen);
-    setIsYearFilterOpen(false);
-    setIsGenreFilterOpen(false);
+  const changeActiveFilter = (nameFilter: string) => {
+    if (activeFilter === nameFilter) {
+      setActiveFilter(null);
+    } else {
+      setActiveFilter(nameFilter);
+    }
   };
 
-  const toggleYearFilter = () => {
-    setIsYearFilterOpen(!isYearFilterOpen);
-    setIsArtistFilterOpen(false);
-    setIsGenreFilterOpen(false);
+  const uniqAuthors = getUniqueValues(tracks, 'author');
+  const uniqGenres = getUniqueValues(tracks, 'genre');
+  const years = ['Сначала новые', 'Сначала старые', 'По умолчанию'];
+
+  const onSelectedAuthor = (author: string) => {
+    dispatch(setFilterAuthors(author));
   };
 
-  const toggleGenreFilter = () => {
-    setIsGenreFilterOpen(!isGenreFilterOpen);
-    setIsArtistFilterOpen(false);
-    setIsYearFilterOpen(false);
+  const onSelectedGenres = (genres: string) => {
+    dispatch(setFilterGenres(genres));
+  };
+
+  const onSelectedYears = (years: string) => {
+    dispatch(setFilterYears(years));
   };
 
   return (
@@ -43,22 +49,28 @@ export default function Filter({ tracks }: FilterProps) {
       <div className={styles.filter__title}>Искать по:</div>
 
       <FilterItems
-        label="исполнителю"
-        isOpen={isArtistFilterOpen}
-        onToggle={toggleArtistFilter}
-        items={uniqueAuthors}
+        activeFilter={activeFilter}
+        changeActiveFilter={changeActiveFilter}
+        nameFilter={'author'}
+        list={uniqAuthors}
+        titleFilter={'исполнителю'}
+        onSelect={onSelectedAuthor}
       />
       <FilterItems
-        label="году выпуска"
-        isOpen={isYearFilterOpen}
-        onToggle={toggleYearFilter}
-        items={yearOptions}
+        activeFilter={activeFilter}
+        changeActiveFilter={changeActiveFilter}
+        nameFilter={'year'}
+        list={years}
+        titleFilter={'году выпуска'}
+        onSelect={onSelectedYears}
       />
       <FilterItems
-        label="жанру"
-        isOpen={isGenreFilterOpen}
-        onToggle={toggleGenreFilter}
-        items={uniqueGenre}
+        activeFilter={activeFilter}
+        changeActiveFilter={changeActiveFilter}
+        nameFilter={'genre'}
+        list={uniqGenres}
+        titleFilter={'жанру'}
+        onSelect={onSelectedGenres}
       />
     </div>
   );

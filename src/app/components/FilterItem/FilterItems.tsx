@@ -1,43 +1,70 @@
-'use client';
-
+import classNames from 'classnames';
 import styles from './filterItems.module.css';
+import { useAppSelector } from '@/app/store/store';
 
-interface FilterItemProps {
-  label: string;
-  isOpen: boolean;
-  onToggle: () => void;
-  items?: string[];
-  onItemClick?: (item: string) => void;
-}
+type filterItemProps = {
+  activeFilter: null | string;
+  changeActiveFilter: (n: string) => void;
+  nameFilter: string;
+  list: string[];
+  titleFilter: string;
+  onSelect: (value: string) => void;
+};
 
-export default function FilterItem({
-  label,
-  isOpen,
-  onToggle,
-  items,
-  onItemClick,
-}: FilterItemProps) {
+export default function FilterItems({
+  activeFilter,
+  changeActiveFilter,
+  nameFilter,
+  list,
+  titleFilter,
+  onSelect,
+}: filterItemProps) {
+  const isOpen = activeFilter === nameFilter;
+
+  const { filters } = useAppSelector((state) => state.tracks);
+
+  const isItemActive = (item: string) => {
+    if (nameFilter === 'author') {
+      return filters.authors.includes(item);
+    } else if (nameFilter === 'genre') {
+      return filters.genres.includes(item);
+    } else if (nameFilter === 'year') {
+      return filters.years === item;
+    }
+    return false;
+  };
+
   return (
     <div className={styles.filter__wrapper}>
       <div
-        className={`${styles.filter__button} ${
-          isOpen ? styles.filter__button_active : ''
-        }`}
-        onClick={onToggle}
+        className={classNames(styles.filter__button, {
+          [styles.filter__button_active]: isOpen,
+        })}
+        onClick={() => changeActiveFilter(nameFilter)}
       >
-        {label}
+        {titleFilter}
       </div>
-      {isOpen && items && items.length > 0 && (
+
+      {isOpen && (
         <div className={styles.filter__dropdown}>
-          {items.map((item) => (
-            <div
-              key={item}
-              className={styles.dropdown__item}
-              onClick={() => onItemClick?.(item)}
-            >
-              {item}
-            </div>
-          ))}
+          {list.map((el, index) => {
+            const isActive = isItemActive(el);
+
+            return (
+              <div
+                key={index}
+                onClick={() => onSelect(el)}
+                className={classNames(styles.dropdown__item, {
+                  [styles.dropdown__item_active]:
+                    isActive && nameFilter !== 'year',
+                  [styles.dropdown__item_radio_active]:
+                    isActive && nameFilter === 'year',
+                })}
+              >
+                {el}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

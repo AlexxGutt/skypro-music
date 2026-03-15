@@ -2,14 +2,12 @@
 
 import { useAppSelector } from '@/app/store/store';
 import styles from './page.module.css';
-
 import Centerblock from '@/app/components/Centerblock/Centerblock';
-import { useFetchFavorites } from '@/hooks/useFetchFavorives';
+import { useFetchFavorites } from '@/hooks/useFetchFavorites';
 
 export default function FavoritesPage() {
-  const { favoriteTracks, fetchIsLoading, fetchError } = useAppSelector(
-    (state) => state.tracks,
-  );
+  const { favoriteTracks, filteredTracks, fetchIsLoading, fetchError } =
+    useAppSelector((state) => state.tracks);
   const { access } = useAppSelector((state) => state.auth);
 
   useFetchFavorites();
@@ -18,6 +16,7 @@ export default function FavoritesPage() {
     return (
       <Centerblock
         tracks={[]}
+        pagePlaylist={[]}
         isLoading={false}
         error={null}
         title="Избранные треки"
@@ -38,6 +37,7 @@ export default function FavoritesPage() {
     return (
       <Centerblock
         tracks={[]}
+        pagePlaylist={[]}
         isLoading={false}
         error={null}
         title="Избранные треки"
@@ -59,7 +59,8 @@ export default function FavoritesPage() {
 
   return (
     <Centerblock
-      tracks={favoriteTracks}
+      tracks={filteredTracks}
+      pagePlaylist={favoriteTracks}
       isLoading={fetchIsLoading}
       error={fetchError}
       title="Избранные треки"

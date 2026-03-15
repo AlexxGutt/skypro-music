@@ -6,7 +6,8 @@ import Centerblock from '@/app/components/Centerblock/Centerblock';
 import { getCategoryTracks } from '@/app/services/tracks/tracksApi';
 import { TrackType } from '@/app/sharedTypes/sharedTypes';
 import { AxiosError } from 'axios';
-import { useAppSelector } from '@/app/store/store';
+import { useAppSelector, useAppDispatch } from '@/app/store/store';
+import { setPagePlaylist } from '@/app/store/features/trackSlice';
 
 const categoryTitles: Record<string, string> = {
   '2': 'Плейлист дня',
@@ -17,21 +18,28 @@ const categoryTitles: Record<string, string> = {
 export default function CategoryPage() {
   const params = useParams<{ id: string }>();
   const id = params.id;
-  const { allTracks, fetchIsLoading } = useAppSelector((state) => state.tracks);
+  const dispatch = useAppDispatch();
 
-  const [tracks, setTracks] = useState<TrackType[]>([]);
+  const { allTracks, filteredTracks, fetchIsLoading } = useAppSelector(
+    (state) => state.tracks,
+  );
+
+  const [categoryTracks, setCategoryTracks] = useState<TrackType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setIsLoading(true);
+
     if (!fetchIsLoading) {
       getCategoryTracks(id)
         .then((categoryTrackIds) => {
-          const filteredTracks = allTracks.filter((track) =>
+          const filtered = allTracks.filter((track) =>
             categoryTrackIds.includes(track._id),
           );
-          setTracks(filteredTracks);
+          setCategoryTracks(filtered);
+
+          dispatch(setPagePlaylist(filtered));
         })
         .catch((error) => {
           if (error instanceof AxiosError) {
@@ -52,11 +60,12 @@ export default function CategoryPage() {
           setIsLoading(false);
         });
     }
-  }, [fetchIsLoading]);
+  }, [fetchIsLoading, id, allTracks, dispatch]);
 
   return (
     <Centerblock
-      tracks={tracks}
+      tracks={filteredTracks}
+      pagePlaylist={categoryTracks}
       isLoading={isLoading}
       error={error}
       title={categoryTitles[id] || 'Подборка'}
