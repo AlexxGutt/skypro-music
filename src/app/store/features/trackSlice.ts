@@ -1,5 +1,8 @@
+import { SORT_OPTIONS, SortOption } from '@/app/constants/constants';
 import { TrackType } from '@/app/sharedTypes/sharedTypes';
 import { applyFilters } from '@/app/utils/applyFilters';
+import { toggleFilterInArray } from '@/app/utils/toggleFilter';
+import { getNextTrack, getPrevTrack } from '@/app/utils/trackControls';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export type initialStateType = {
@@ -19,7 +22,7 @@ export type initialStateType = {
   filters: {
     authors: string[];
     genres: string[];
-    years: string;
+    years: SortOption;
   };
 };
 
@@ -40,7 +43,7 @@ const initialState: initialStateType = {
   filters: {
     authors: [],
     genres: [],
-    years: 'По умолчанию',
+    years: SORT_OPTIONS.DEFAULT,
   },
 };
 
@@ -68,56 +71,28 @@ const trackSlice = createSlice({
       state.isShuffle = !state.isShuffle;
     },
     setNextTrack: (state) => {
-      const playlist = state.isShuffle
-        ? state.shuffledPlaylist
-        : state.playlist;
-
-      const currentIndex = playlist.findIndex(
-        (el) => el._id === state.currentTrack?._id,
+      const result = getNextTrack(
+        state.currentTrack,
+        state.playlist,
+        state.isShuffle,
+        state.shuffledPlaylist,
       );
 
-      if (state.isShuffle) {
-        const nextIndex =
-          currentIndex === playlist.length - 1 ? 0 : currentIndex + 1;
-        state.currentTrack = playlist[nextIndex];
-        state.currentTrackIndex = nextIndex;
-        state.isPlay = true;
-      } else {
-        const nextIndexTrack = currentIndex + 1;
-        if (nextIndexTrack < playlist.length) {
-          state.currentTrack = playlist[nextIndexTrack];
-          state.currentTrackIndex = nextIndexTrack;
-          state.isPlay = true;
-        } else {
-          state.currentTrack = null;
-          state.currentTrackIndex = -1;
-          state.isPlay = false;
-        }
-      }
+      state.currentTrack = result.nextTrack;
+      state.currentTrackIndex = result.nextIndex;
+      state.isPlay = result.shouldPlay;
     },
     setPrevTrack: (state) => {
-      const playlist = state.isShuffle
-        ? state.shuffledPlaylist
-        : state.playlist;
-
-      const currentIndex = playlist.findIndex(
-        (el) => el._id === state.currentTrack?._id,
+      const result = getPrevTrack(
+        state.currentTrack,
+        state.playlist,
+        state.isShuffle,
+        state.shuffledPlaylist,
       );
 
-      if (state.isShuffle) {
-        const prevIndex =
-          currentIndex === 0 ? playlist.length - 1 : currentIndex - 1;
-        state.currentTrack = playlist[prevIndex];
-        state.currentTrackIndex = prevIndex;
-        state.isPlay = true;
-      } else {
-        const prevIndexTrack = currentIndex - 1;
-        if (prevIndexTrack >= 0) {
-          state.currentTrack = playlist[prevIndexTrack];
-          state.currentTrackIndex = prevIndexTrack;
-          state.isPlay = true;
-        }
-      }
+      state.currentTrack = result.nextTrack;
+      state.currentTrackIndex = result.nextIndex;
+      state.isPlay = result.shouldPlay;
     },
     setAllTracks: (state, action: PayloadAction<TrackType[]>) => {
       state.allTracks = action.payload;
@@ -132,6 +107,10 @@ const trackSlice = createSlice({
       state.favoriteTracks = state.favoriteTracks.filter(
         (track) => track._id !== action.payload._id,
       );
+    },
+    syncFavoritePage: (state) => {
+      state.pagePlaylist = state.favoriteTracks;
+      state.filteredTracks = applyFilters(state);
     },
     setFetchError: (state, action: PayloadAction<string>) => {
       state.fetchError = action.payload;
@@ -149,31 +128,18 @@ const trackSlice = createSlice({
     },
     setFilterAuthors: (state, action: PayloadAction<string>) => {
       const author = action.payload;
-
-      if (state.filters.authors.includes(author)) {
-        state.filters.authors = state.filters.authors.filter((el) => {
-          return el !== author;
-        });
-      } else {
-        state.filters.authors = [...state.filters.authors, author];
-      }
-
+      state.filters.authors = toggleFilterInArray(
+        state.filters.authors,
+        author,
+      );
       state.filteredTracks = applyFilters(state);
     },
     setFilterGenres: (state, action: PayloadAction<string>) => {
-      const genres = action.payload;
-
-      if (state.filters.genres.includes(genres)) {
-        state.filters.genres = state.filters.genres.filter((el) => {
-          return el !== genres;
-        });
-      } else {
-        state.filters.genres = [...state.filters.genres, genres];
-      }
-
+      const genre = action.payload;
+      state.filters.genres = toggleFilterInArray(state.filters.genres, genre);
       state.filteredTracks = applyFilters(state);
     },
-    setFilterYears: (state, action: PayloadAction<string>) => {
+    setFilterYears: (state, action: PayloadAction<SortOption>) => {
       state.filters.years = action.payload;
       state.filteredTracks = applyFilters(state);
     },
@@ -208,5 +174,6 @@ export const {
   setFilterYears,
   setSearchQuery,
   setResetFilters,
+  syncFavoritePage,
 } = trackSlice.actions;
 export const trackSliceReducer = trackSlice.reducer;

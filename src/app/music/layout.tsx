@@ -5,9 +5,9 @@ import Nav from '../components/Nav/Nav';
 import Sidebar from '../components/Sidebar/Sidebar';
 import Bar from '../components/Bar/Bar';
 import FetchingTracks from '../components/FetchingTracks/FetchingTracks';
-import { useInitAuth } from '@/hooks/useInitAuth';
-import { useFetchFavorites } from '@/hooks/useFetchFavorites';
-import { useResetFilters } from '@/hooks/useResetFilters';
+import { useInitAuth } from '@/app/hooks/useInitAuth';
+import { useFetchFavorites } from '@/app/hooks/useFetchFavorites';
+import { useResetFilters } from '@/app/hooks/useResetFilters';
 interface AuthLayoutProps {
   children: ReactNode;
 }

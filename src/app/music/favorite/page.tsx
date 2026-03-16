@@ -3,7 +3,7 @@
 import { useAppSelector } from '@/app/store/store';
 import styles from './page.module.css';
 import Centerblock from '@/app/components/Centerblock/Centerblock';
-import { useFetchFavorites } from '@/hooks/useFetchFavorites';
+import { useFetchFavorites } from '@/app/hooks/useFetchFavorites';
 
 export default function FavoritesPage() {
   const { favoriteTracks, filteredTracks, fetchIsLoading, fetchError } =
@@ -24,7 +24,7 @@ export default function FavoritesPage() {
         <div className={styles.messageContainer}>
           <div className={styles.emptyMessage}>
             <p>Войдите в аккаунт, чтобы увидеть избранные треки</p>
-            <a href="/signin" className={styles.emptyLink}>
+            <a href="/auth/signin" className={styles.emptyLink}>
               Перейти к авторизации
             </a>
           </div>
